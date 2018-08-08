@@ -24,7 +24,6 @@ public class Player : MonoBehaviour
     public float rotSpeed = 300;// 회전 속도
     public float rayRadius = 0.2f;// 레이 반경
     public float attackRange = 2f;
-    public float power = 10f;
     public bool IsLocked = false;// 마우스 락 확인
     public bool buttonClicked = true;// 버튼 클릭 확인
 
@@ -81,6 +80,7 @@ public class Player : MonoBehaviour
 
         RaycastHit hitInfo;// 레이 정보
 
+
         // Fire1키로 공격/상호작용
         if (Input.GetButtonDown("Fire1"))
         {
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
                     float mag = (hitInfo.transform.parent.transform.position - transform.position).magnitude;
                     if(attackRange >= mag)
                     {
-                        hitInfo.transform.parent.GetComponent<Enemy>().Damaged(power);
+                        hitInfo.transform.parent.GetComponent<Enemy>().Damaged(User_Manager.power);
                     }
                 }
             }

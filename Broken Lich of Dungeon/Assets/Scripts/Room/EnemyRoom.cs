@@ -23,6 +23,7 @@ public class EnemyRoom : MonoBehaviour
     // 클리어 조건
     public bool text_Action_Check = false;
     public bool door_Action_Check = false;
+    public bool enemy_Remove_Check = false;
 
     //private void Awake()
     //{
@@ -32,26 +33,40 @@ public class EnemyRoom : MonoBehaviour
     //    }
     //}
 
-    //List<Transform> spawnPool = new List<Transform>();
+    List<Transform> spawnPool = new List<Transform>();
 
     void Start()
     {
         //// 자식 스포너들을 담을 변수
-        //for (int i = 0; i < transform.childCount; i++)
-        //{
-        //    if (transform.GetChild(i).name.Contains("Spawn"))
-        //    {
-        //        // 스포너 전체를 비활성화
-        //        transform.GetChild(i).gameObject.SetActive(false);
-        //        spawnPool.Add(transform.GetChild(i));
-        //    }
-        //}
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).name.Contains("Spawn"))
+            {
+                // 스포너 전체를 비활성화
+                spawnPool.Add(transform.GetChild(i));
+            }
+        }
 
     }
 
     void Update()
     {
-        // 스포너에 담을 정보를 매니저에게 받는다.
+        if(spawnPool.Count == 0)
+        {
+            enemy_Remove_Check = true;
+        }
+        else
+        {
+            //print(spawnPool.FindIndex(0));
+        }
+
+
+
+        if(enemy_Remove_Check == true)
+        {
+            door_Action_Check = true;
+        }
+
 
         if (text_Action_Check == true && door_Action_Check == true)
         {
@@ -61,16 +76,6 @@ public class EnemyRoom : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        if (Player.instance.buttonClicked)
-        {
-            switch (Player.instance.rayObject.name)
-            {
-                case "Start_Text":
-                    ViewText();
-                    break;
-
-            }
-        }
     }
 
     public void ViewText()

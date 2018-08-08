@@ -1,4 +1,6 @@
 ﻿#region 네임스페이스
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 #endregion
@@ -28,7 +30,8 @@ public class Enemy : MonoBehaviour
     public float attackDelay = 1f;// 공격 딜레이
     public float stopDelay = 3f;
     public float destinationRange = 1f;
-    public float warnignRange = 20;
+    public float warningRange = 20;
+    public float deadTime = 3f;
     // 적의 정보
     public float enemy_damage = 100; // 몬스터 공격력
     public float enemy_hp; // 몬스터 hp
@@ -39,10 +42,13 @@ public class Enemy : MonoBehaviour
 
     public EState es;// 적 상태
 
+    public bool deadState = false;
+
     NavMeshAgent agent;// 네비 메시 에이전트
     Transform target;// 에이전트의 타겟
     Transform wayPoint;// 웨이 포인트 집합
     Transform[] path;// 웨이 포인트 패스
+    Animator anim;
 
     int randPath;// 랜덤으로 길을 고르는 변수
     float curTime = 0;// 경과 시간
@@ -58,11 +64,15 @@ public class Enemy : MonoBehaviour
     #region 시작 함수
     void Start()
     {
+        anim = transform.GetComponentInChildren<Animator>();
         agent = transform.GetComponent<NavMeshAgent>();// 네브 메시 에이전트 동적 할당
         target = GameObject.FindGameObjectWithTag("Player").transform;// 타겟을 플레이어로 동적 할당
         wayPoint = transform.parent.parent.Find("WayPoint");// 웨이 포인트 집합 동적 할당
         path = new Transform[wayPoint.childCount];// 웨이 포인트 패스들을 동적 할당
         es = EState.Idle;// 적 상태를 idle 상태로 초기화
+        anim.SetTrigger("Idle");
+
+        enemy_hp = enemy_max_hp;
 
         // 웨이 포인트 집합에서 웨이 포인트 패스 변수로 할당
         for (int i = 0; i < path.Length; i++)
@@ -102,6 +112,7 @@ public class Enemy : MonoBehaviour
     #region idle 상태 함수
     void Idle()
     {
+        anim.SetTrigger("Idle");
         curTime += Time.deltaTime;// 경과 시간 할당
 
         // idle 딜레이 이후 move 상태로 전환
@@ -116,6 +127,8 @@ public class Enemy : MonoBehaviour
     #region move 상태 함수
     void Move()
     {
+        anim.SetTrigger("Move");
+        agent.enabled = true;
         mag = Vector3.Distance(target.position,
             transform.position);// 플레이어와 적 사이의 거리
 
@@ -130,73 +143,120 @@ public class Enemy : MonoBehaviour
         // 시야 안쪽
         if (radi <= viewAngle)
         {
+            print("in : " + agent.pathEndPosition);
             // 거리 안쪽
             if (mag <= moveRange)
             {
-                // 장애물 유
-                if (float.IsInfinity(agent.remainingDistance))
-                {
-                    agent.destination = agent.pathEndPosition;
-                }
                 // 장애물 무
-                else
+                if (!float.IsInfinity(agent.remainingDistance))
                 {
                     // 플레이어를 따라간다.
+                    if (agent.destination != target.position)
+                    {
+                        agent.ResetPath();
+                    }
                     agent.destination = target.position;
-                    print(agent.remainingDistance);
+                    //print(agent.remainingDistance);
                     // 공격 가능 거리에 도달하면 공격으로 상태로 전환
                     if (attackRange >= mag)
                     {
                         curTime = attackDelay;
-                        agent.isStopped = true;
+                        agent.enabled = false;
                         es = EState.Attack;
+                    }
+                }
+                // 장애물 유
+                else
+                {
+                    // 플레이어의 마지막 위치까지  쫓아간다.
+                    if (agent.destination == target.position)
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
+                    else
+                    {
+                        // 플레이어가 시야 안에 들어오면 플레이어를 쫓는다.
+                        if (radi <= viewAngle && mag <= moveRange)
+                        {
+                            agent.destination = target.position;
+                        }
+                        // 갈 길간다.
+                        else
+                        {
+                            agent.destination = agent.pathEndPosition;
+                        }
                     }
                 }
             }
             // 거리 바깥쪽
             else
             {
-                // 장애물 유
-                if (float.IsInfinity(agent.remainingDistance))
-                {
-                    agent.destination = agent.pathEndPosition;
-                }
                 // 장애물 무
+                if (!float.IsInfinity(agent.remainingDistance))
+                {
+                    if (agent.destination == target.position)
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
+                    NewWayPoint();
+                }
+                // 장애물 유
                 else
                 {
-                    NewWayPoint();
+                    if (agent.destination == target.position)
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
+                    agent.destination = agent.pathEndPosition;
                 }
             }
         }
         // 시야 바깥쪽
         else
         {
+            print("out : " + agent.pathEndPosition);
             //거리 안쪽
             if (mag <= moveRange)
             {
-                // 장애물 안쪽
-                if (float.IsInfinity(agent.remainingDistance))
+                // 장애물 무
+                if (!float.IsInfinity(agent.remainingDistance))
                 {
-                    agent.destination = agent.pathEndPosition;
+                    if (agent.destination == target.position)
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
+                    NewWayPoint();
                 }
                 // 장애물 바깥쪽
                 else
                 {
-                    NewWayPoint();
+                    if (agent.destination == target.position)
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
+                    agent.destination = agent.pathEndPosition;
                 }
             }
             //거리 바깥쪽
             else
             {
                 // 장애물 안쪽
-                if (float.IsInfinity(agent.remainingDistance))
+                if (!float.IsInfinity(agent.remainingDistance))
                 {
-                    agent.destination = agent.pathEndPosition;
+                    if (agent.destination == target.position)
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
+                    NewWayPoint();
                 }
                 //장애물 바깥쪽
                 else
                 {
-                    NewWayPoint();
+                    if (agent.destination == target.position)
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
+                    agent.destination = agent.pathEndPosition;
                 }
             }
         }
@@ -264,13 +324,18 @@ public class Enemy : MonoBehaviour
         // 공격 딜레이가 지나면 플레이어를 공격
         if (curTime >= attackDelay)
         {
-            print("Attack!");
-            curTime = 0;// 경과 시간 초기화
-                        // 플레이어에게 데미지를 준다.
+            // 플레이어에게 데미지를 준다.
             if (attackRange <= mag)
             {
-                agent.isStopped = false;
                 es = EState.Move;
+                curTime = 0;// 경과 시간 초기화
+            }
+            else
+            {
+                print("attack");
+                anim.SetTrigger("Attack");
+                curTime = 0;// 경과 시간 초기화
+
             }
         }
     }
@@ -279,9 +344,11 @@ public class Enemy : MonoBehaviour
     #region damaged 상태 함수
     public void Damaged(float damage)
     {
+        agent.enabled = false;
         EnemyAngle();
         if (enemy_hp > 0)
         {
+            anim.SetTrigger("Damage");
             if (radi >= viewAngle)
             {
                 enemy_hp -= damage * 2;
@@ -291,7 +358,7 @@ public class Enemy : MonoBehaviour
                 {
                     float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
 
-                    if (friendMag <= warnignRange)
+                    if (friendMag <= warningRange)
                     {
                         transform.parent.GetChild(i).GetComponent<Enemy>().es = EState.Warning;
                     }
@@ -313,6 +380,7 @@ public class Enemy : MonoBehaviour
         else
         {
             es = EState.Dead;
+            deadState = true;
         }
 
     }
@@ -325,6 +393,7 @@ public class Enemy : MonoBehaviour
 
         EnemyAngle();
 
+        // 시야와 거리 안에 들어오면 move 상태로 바꾼다.
         if (radi <= viewAngle)
         {
             if (mag <= moveRange)
@@ -334,6 +403,7 @@ public class Enemy : MonoBehaviour
                 print("move");
             }
         }
+        // 플레이어를 쫓는다.
         else
         {
             agent.destination = target.position;
@@ -343,7 +413,25 @@ public class Enemy : MonoBehaviour
     #region dead 상태 함수
     void Dead()
     {
-
+        if (deadState)
+        {
+            StartCoroutine("DeadProcess");
+            deadState = false;
+        }
+        else
+        {
+            deadState = false;
+        }
     }
     #endregion
+
+    IEnumerator DeadProcess()
+    {
+        anim.SetTrigger("Dead");
+        yield return new WaitForSeconds(deadTime);
+
+        Destroy(gameObject);
+
+    }
+
 }

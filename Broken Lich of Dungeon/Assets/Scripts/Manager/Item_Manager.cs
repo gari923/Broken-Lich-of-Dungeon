@@ -3,7 +3,7 @@ using UnityEngine;
 #endregion
 
 #region 아이템 종류
-enum Weapon { fist, old_sword, bar, stone }
+public enum Weapon { fist, old_sword, bar, stone }
 #endregion
 
 /// <summary>
