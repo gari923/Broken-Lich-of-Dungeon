@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     // 각각의 방에 들어갔는지 체크하는 플래그
     bool start_Check = false;
     bool last_Check = false;
-    bool mirror_Check = true;
+    bool enemy_Check = true;
     bool patience_Check = true;
     bool knife_Check = true;
     bool projectile_Check = true;
@@ -22,13 +22,22 @@ public class GameManager : MonoBehaviour
     // 각각의 방
     public GameObject start_Room;
     public GameObject last_Room;
-    public GameObject mirror_Room;
+    public GameObject enemy_Room;
     public GameObject patience_Room;
     public GameObject knife_Room;
     public GameObject projectile_Room;
     public GameObject door_Room;
 
-    public GameObject player;// 플레이어
+    // 각각의 방의 시작지점
+    public Transform start_Room_StartPoint;
+    public Transform last_Room_StartPoint;
+    public Transform enemy_Room_StartPoint;
+    public Transform patience_Room_StartPoint;
+    public Transform knife_Room_StartPoint;
+    public Transform projectile_Room_StartPoint;
+    public Transform door_Room_StartPoint;
+
+    GameObject player;// 플레이어
 
     // 다른 방으로 갈수 있는지 확인하는 변수(각 방에서 조건을 완료시키면 true)
     public bool rock = false;
@@ -46,13 +55,18 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        player = GameObject.Find("Player");
+    }
+
     #region 업데이트 함수
     void Update()
     {
         // 모든 방이 비활성화일 경우 마지막방을 활성화
         if (start_Check == false
             && last_Check == false
-            && mirror_Check == false
+            && enemy_Check == false
             && patience_Check == false
             && knife_Check == false
             && projectile_Check == false
@@ -76,9 +90,10 @@ public class GameManager : MonoBehaviour
                         start_Check = false;// 그 방에 들어갔다고 체크
                         start_Room.SetActive(true);// 해당하는 방을 활성
                         player.transform.position
-                            = start_Room.transform.position;// 플레이어를 해당 좌표로 이동
+                            = start_Room_StartPoint.transform.position;// 플레이어를 해당 좌표로 이동
                         rock = false;// 락을 걸기
                         move = false;// 상호작용 완료
+                        print(random + "방으로 이동합니다");
                     }
                     break;
                 case 1:
@@ -86,19 +101,21 @@ public class GameManager : MonoBehaviour
                     {
                         last_Check = false;
                         last_Room.SetActive(true);
-                        player.transform.position = last_Room.transform.position;
+                        player.transform.position = last_Room_StartPoint.transform.position;
                         rock = false;
                         move = false;
+                        print(random + "방으로 이동합니다");
                     }
                     break;
                 case 2:
-                    if (mirror_Check == true)
+                    if (enemy_Check == true)
                     {
-                        mirror_Check = false;
-                        mirror_Room.SetActive(true);
-                        player.transform.position = mirror_Room.transform.position;
+                        enemy_Check = false;
+                        enemy_Room.SetActive(true);
+                        player.transform.position = enemy_Room_StartPoint.transform.position;
                         rock = false;
                         move = false;
+                        print(random + "방으로 이동합니다");
                     }
                     break;
                 case 3:
@@ -106,9 +123,10 @@ public class GameManager : MonoBehaviour
                     {
                         patience_Check = false;
                         patience_Room.SetActive(true);
-                        player.transform.position = patience_Room.transform.position;
+                        player.transform.position = patience_Room_StartPoint.transform.position;
                         rock = false;
                         move = false;
+                        print(random + "방으로 이동합니다");
                     }
                     break;
                 case 4:
@@ -116,9 +134,10 @@ public class GameManager : MonoBehaviour
                     {
                         knife_Check = false;
                         knife_Room.SetActive(true);
-                        player.transform.position = knife_Room.transform.position;
+                        player.transform.position = knife_Room_StartPoint.transform.position;
                         rock = false;
                         move = false;
+                        print(random + "방으로 이동합니다");
                     }
                     break;
                 case 5:
@@ -126,9 +145,10 @@ public class GameManager : MonoBehaviour
                     {
                         projectile_Check = false;
                         projectile_Room.SetActive(true);
-                        player.transform.position = projectile_Room.transform.position;
+                        player.transform.position = projectile_Room_StartPoint.transform.position;
                         rock = false;
                         move = false;
+                        print(random + "방으로 이동합니다");
                     }
                     break;
                 case 6:
@@ -136,13 +156,13 @@ public class GameManager : MonoBehaviour
                     {
                         door_Check = false;
                         door_Room.SetActive(true);
-                        player.transform.position = door_Room.transform.position;
+                        player.transform.position = door_Room_StartPoint.transform.position;
                         rock = false;
                         move = false;
+                        print(random + "방으로 이동합니다");
                     }
                     break;
-            }
-            print(random + "방으로 이동합니다");
+            }     
         }
     }
     #endregion
