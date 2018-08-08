@@ -143,7 +143,7 @@ public class Enemy : MonoBehaviour
         // 시야 안쪽
         if (radi <= viewAngle)
         {
-            print("in : " + agent.pathEndPosition);
+            //print("in : " + agent.pathEndPosition);
             // 거리 안쪽
             if (mag <= moveRange)
             {
@@ -214,7 +214,7 @@ public class Enemy : MonoBehaviour
         // 시야 바깥쪽
         else
         {
-            print("out : " + agent.pathEndPosition);
+            //print("out : " + agent.pathEndPosition);
             //거리 안쪽
             if (mag <= moveRange)
             {
@@ -346,43 +346,60 @@ public class Enemy : MonoBehaviour
     {
         agent.enabled = false;
         EnemyAngle();
-        if (enemy_hp > 0)
+
+        if (deadState)
         {
-            anim.SetTrigger("Damage");
-            if (radi >= viewAngle)
-            {
-                enemy_hp -= damage * 2;
-                es = EState.Warning;
 
-                for (int i = 0; i < transform.parent.childCount - 1; i++)
-                {
-                    float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
-
-                    if (friendMag <= warningRange)
-                    {
-                        transform.parent.GetChild(i).GetComponent<Enemy>().es = EState.Warning;
-                    }
-                }
-            }
-            else
-            {
-                enemy_hp -= damage;
-
-            }
-
-            // 만약 시야범위 내에 플레이어가 없는데 공격을 당하면 데미지 두배(백어택)
-            // 받은 즉시 플레이어의 위치로 destination을 바꾼다.
-
-            // 피격된 적에서 부터의 범위 내에 다른 적이 있을 시 해당 적의 destination을 플레이어로 바꾼다.
-            // move안에 warning 만들기
-            // 도착한 뒤에는 move 상태로 바꾼다.(moveMag 안에 들어올 시 move 상태로 전환)
         }
         else
         {
-            es = EState.Dead;
-            deadState = true;
-        }
+            if (enemy_hp > 0)
+            {
+                anim.SetTrigger("Damage");
+                if (radi >= viewAngle)
+                {
+                    enemy_hp -= damage * 2;
+                    //es = EState.Warning;
 
+                    print(transform.parent.childCount);
+                    for (int i = 0; i < transform.parent.childCount; i++)
+                    {
+                        float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
+
+                        if (friendMag <= warningRange)
+                        {
+                            if (transform.parent.GetChild(i).gameObject == gameObject)
+                            {
+                                print("!!");
+                                es = EState.Warning;
+                            }
+                            else
+                            {
+                                transform.parent.GetChild(i).GetComponent<Enemy>().es = EState.Warning;
+                            }
+
+                        }
+                    }
+                }
+                else
+                {
+                    enemy_hp -= damage;
+                    es = EState.Move;
+                }
+
+                // 만약 시야범위 내에 플레이어가 없는데 공격을 당하면 데미지 두배(백어택)
+                // 받은 즉시 플레이어의 위치로 destination을 바꾼다.
+
+                // 피격된 적에서 부터의 범위 내에 다른 적이 있을 시 해당 적의 destination을 플레이어로 바꾼다.
+                // move안에 warning 만들기
+                // 도착한 뒤에는 move 상태로 바꾼다.(moveMag 안에 들어올 시 move 상태로 전환)
+            }
+            else
+            {
+                es = EState.Dead;
+                deadState = true;
+            }
+        }
     }
     #endregion
 
@@ -406,7 +423,9 @@ public class Enemy : MonoBehaviour
         // 플레이어를 쫓는다.
         else
         {
+
             agent.destination = target.position;
+
         }
     }
 
