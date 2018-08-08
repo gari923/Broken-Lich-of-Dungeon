@@ -24,14 +24,20 @@ public class Player : MonoBehaviour
     public float rotSpeed = 300;// 회전 속도
     public float rayRadius = 0.2f;// 레이 반경
     public float attackRange = 2f;
+    public float idleRange = 5f;
+    public float siteRange = 4f;
     public bool IsLocked = false;// 마우스 락 확인
     public bool buttonClicked = true;// 버튼 클릭 확인
 
-
     CharacterController cc;// 캐릭터 컨트롤러 변수
+    Ray ray;
+    RaycastHit hitInfo;
+
+    pState ps;
 
     float v;// 수직 움직임
     float h;// 수평 움직임
+
     #endregion
 
     #region 어웨이크 함수
@@ -56,6 +62,8 @@ public class Player : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
         cc = transform.GetComponent<CharacterController>();// 캐릭터 컨트롤 동적 할당
+
+        ps = pState.Attack;
     }
     #endregion
 
@@ -75,23 +83,42 @@ public class Player : MonoBehaviour
 
         cc.SimpleMove(dir * moveSpeed);// 바라보는 방향으로 이동
 
-        Ray ray = new Ray(Camera.main.transform.position,
+        ray = new Ray(Camera.main.transform.position,
             Camera.main.transform.forward);// 카메라 방향으로 레이를 쏘기
 
-        RaycastHit hitInfo;// 레이 정보
+        //RaycastHit hitInfo;// 레이 정보
 
+        if(Physics.SphereCast(ray,rayRadius,out hitInfo, siteRange))
+        {
+            rayObject = hitInfo.transform;
+        }
 
+        switch (ps)
+        {
+            case pState.Idle:
+                Idle();
+                break;
+            case pState.Attack:
+                Attack();
+                break;
+        }
+
+    }
+
+    void Idle()
+    {
         // Fire1키로 공격/상호작용
         if (Input.GetButtonDown("Fire1"))
         {
-            if (Physics.SphereCast(ray,rayRadius,out hitInfo, 1000))
+            if (Physics.SphereCast(ray, rayRadius, out hitInfo, idleRange))
             {
                 print(hitInfo.transform.name);
-                if (hitInfo.transform.parent.tag.Equals("Enemy"))
+                if (hitInfo.transform.tag.Equals("Enemy"))
                 {
-                    float mag = (hitInfo.transform.parent.transform.position - transform.position).magnitude;
-                    if(attackRange >= mag)
+                    float mag = (hitInfo.transform.position - transform.position).magnitude;
+                    if (attackRange >= mag)
                     {
+                        print("hit");
                         hitInfo.transform.parent.GetComponent<Enemy>().Damaged(User_Manager.power);
                     }
                 }
@@ -118,7 +145,43 @@ public class Player : MonoBehaviour
         {
             buttonClicked = false;
         }
+    }
 
+    void Attack()
+    {
+        // Fire1키로 공격/상호작용
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (Physics.SphereCast(ray, rayRadius, out hitInfo, attackRange))
+            {
+                print(hitInfo.transform.name);
+                if (hitInfo.transform.tag.Equals("Enemy"))
+                {
+                        hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.power);
+                }
+            }
+        }
+
+
+        // Jump키를 눌렀을 때 레이 정보를 얻기
+        if (Input.GetButtonDown("Jump"))
+        {
+            buttonClicked = true;// 버튼을 다운을 했을 때 true
+            if (Physics.SphereCast(ray, rayRadius, out hitInfo, 1000))
+            {
+                rayObject = hitInfo.transform;
+            }
+        }
+        else
+        {
+            buttonClicked = false;// 다운을 누르고 있을 때 false
+        }
+
+        // Jump키를 땠을 때 false
+        if (Input.GetButtonUp("Jump"))
+        {
+            buttonClicked = false;
+        }
     }
     #endregion
 }
