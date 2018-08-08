@@ -42,7 +42,7 @@ public class Start_Room : MonoBehaviour
                     case "Start_Text":
                         ViewText();
                         break;
-                    case "Start_Door":
+                    case "Door":
                         OpenDoor();
                         break;
                 }
