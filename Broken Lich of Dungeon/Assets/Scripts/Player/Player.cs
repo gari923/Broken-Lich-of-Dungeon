@@ -88,10 +88,15 @@ public class Player : MonoBehaviour
 
         //RaycastHit hitInfo;// 레이 정보
 
-        if(Physics.SphereCast(ray,rayRadius,out hitInfo, siteRange))
+        if (Physics.SphereCast(ray, rayRadius, out hitInfo, siteRange))
         {
             rayObject = hitInfo.transform;
         }
+        else
+        {
+            rayObject = null;
+        }
+
 
         switch (ps)
         {
@@ -110,11 +115,7 @@ public class Player : MonoBehaviour
         // Fire1키로 공격/상호작용
         if (Input.GetButtonDown("Fire1"))
         {
-<<<<<<< HEAD
             if (Physics.SphereCast(ray, rayRadius, out hitInfo, idleRange))
-=======
-            if (Physics.SphereCast(ray,rayRadius,out hitInfo, 4))
->>>>>>> origin/yudahee
             {
                 print(hitInfo.transform.name);
                 if (hitInfo.transform.tag.Equals("Enemy"))
@@ -161,7 +162,7 @@ public class Player : MonoBehaviour
                 print(hitInfo.transform.name);
                 if (hitInfo.transform.tag.Equals("Enemy"))
                 {
-                        hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.power);
+                    hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.power);
                 }
             }
         }

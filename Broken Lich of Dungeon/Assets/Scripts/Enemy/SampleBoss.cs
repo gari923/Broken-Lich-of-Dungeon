@@ -17,7 +17,7 @@ enum BossState
 public class SampleBoss : MonoBehaviour
 {
     #region 멤버 변수
-    public Transform player;
+   Transform player;
     public Transform dustSmoke;
     public Transform explosion;
     public Transform shockWave;
@@ -51,6 +51,7 @@ public class SampleBoss : MonoBehaviour
         hP = maxHP;
         StartCoroutine("Appear");
         animator.SetTrigger("idle");
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
     #endregion
 

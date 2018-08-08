@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     #region 업데이트 함수
