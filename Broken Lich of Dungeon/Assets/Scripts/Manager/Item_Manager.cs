@@ -11,10 +11,11 @@ public enum Weapon { fist, old_sword, bar, stone }
 /// </summary>
 public class Item_Manager : MonoBehaviour
 {
+    
     #region 멤버 변수
     //무기 능력치
-    public float weapon_Damage;// 무기 대미지
-    public float weapon_buy_gold;// 무기 가격
+    public static float weapon_Damage;// 무기 대미지
+    public static float weapon_buy_gold;// 무기 가격
 
     Weapon weapon;//무기 이름
     #endregion
@@ -38,32 +39,18 @@ public class Item_Manager : MonoBehaviour
             case "old_sword":
                 weapon = Weapon.old_sword;
                 break;
-            case "bar":
-                weapon = Weapon.bar;
-                break;
-            case "stone":
-                weapon = Weapon.stone;
-                break;
         }
 
         //무기의 값
         switch (weapon)
         {
             case Weapon.fist:
-                weapon_Damage = 1;
+                weapon_Damage = 0;
                 weapon_buy_gold = 0;
                 break;
             case Weapon.old_sword:
-                weapon_Damage = 12;
+                weapon_Damage = 3;
                 weapon_buy_gold = 1000;
-                break;
-            case Weapon.bar:
-                weapon_Damage = 5;
-                weapon_buy_gold = 500;
-                break;
-            case Weapon.stone:
-                weapon_Damage = 2;
-                weapon_buy_gold = 300;
                 break;
         }
     }
