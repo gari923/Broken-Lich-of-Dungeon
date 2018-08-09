@@ -20,7 +20,7 @@ public class Shop_Manager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        baseRotation = Quaternion.LookRotation(new Vector3(0, 0, 0));
+        baseRotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
 
     // Update is called once per frame
