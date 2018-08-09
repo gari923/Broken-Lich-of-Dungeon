@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 
     public float moveSpeed = 10;// 이동 속도
     public float rotSpeed = 300;// 회전 속도
-    public float rayRadius = 0.2f;// 레이 반경
+    public float rayRadius = 0.001f;// 레이 반경
     public float attackRange = 2f;
     public float idleRange = 5f;
     public float siteRange = 4f;
@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
     #region 업데이트 함수
     void Update()
     {
+
         transform.forward = new Vector3(Camera.main.transform.forward.x,
             0, Camera.main.transform.forward.z);// 메인 카메라의 방향으로 플레이어 캐릭터의 방향을 전환
 
@@ -90,6 +91,7 @@ public class Player : MonoBehaviour
 
         ray = new Ray(Camera.main.transform.position,
             Camera.main.transform.forward);// 카메라 방향으로 레이를 쏘기
+        Debug.DrawRay(ray.origin, ray.direction * 100, Color.red);
 
         //RaycastHit hitInfo;// 레이 정보
 

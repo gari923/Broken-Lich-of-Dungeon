@@ -8,7 +8,8 @@ using UnityEngine;
 public class User_Manager : MonoBehaviour
 {
     #region 멤버 변수
-    //attack = power*5 + weapon
+    //attack = power*2 + weapon
+    //hp = health *20
 
     public static float gold;//유저의 소지 골드
 
@@ -32,10 +33,17 @@ public class User_Manager : MonoBehaviour
     {
         gold = 0;//돈을 0으로 초기화
         LV = 1; //LV을 1로 초기화
+<<<<<<< HEAD
         hp = max_hp;//hp를 최대치로 초기화
+=======
+>>>>>>> origin/yudahee
         //스텟 초기화
         power = 5;
         health = 5;
+        attack = power * 2 + Item_Manager.weapon_Damage;
+        max_hp = health * 20;
+
+        hp = max_hp;//hp를 최대치로 초기화
     }
     #endregion
 
