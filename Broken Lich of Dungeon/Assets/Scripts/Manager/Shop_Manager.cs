@@ -29,12 +29,7 @@ public class Shop_Manager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-<<<<<<< HEAD
         baseRotation = Quaternion.Euler(new Vector3(0, 0, 0));
-=======
-        //유니티짱이 바라보는 기본좌표를 (0,0,0) 방향으로 한다
-        baseRotation = Quaternion.LookRotation(new Vector3(0, 0, 0));
->>>>>>> origin/yudahee
     }
 
     void Update()

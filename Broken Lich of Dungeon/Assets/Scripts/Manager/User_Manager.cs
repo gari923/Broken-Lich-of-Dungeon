@@ -33,10 +33,7 @@ public class User_Manager : MonoBehaviour
     {
         gold = 0;//돈을 0으로 초기화
         LV = 1; //LV을 1로 초기화
-<<<<<<< HEAD
         hp = max_hp;//hp를 최대치로 초기화
-=======
->>>>>>> origin/yudahee
         //스텟 초기화
         power = 5;
         health = 5;
