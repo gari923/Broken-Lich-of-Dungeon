@@ -25,7 +25,7 @@ public class Start_Room : MonoBehaviour
 
     void Start()
     {
-
+        Player.instance.ps = pState.Idle;
 
     }
 
@@ -35,9 +35,9 @@ public class Start_Room : MonoBehaviour
         //만약 버튼이 클릭되었고 레이가 Start_Text에 닿았다면
         if (Player.instance.buttonClicked)
         {
-            if (Player.instance.rayObject)
+            if (Player.instance.rayObjectclick)
             {
-                switch (Player.instance.rayObject.name)
+                switch (Player.instance.rayObjectclick.name)
                 {
                     case "Start_Text":
                         ViewText();

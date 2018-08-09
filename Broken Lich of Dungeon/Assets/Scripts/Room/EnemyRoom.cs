@@ -21,9 +21,12 @@ public class EnemyRoom : MonoBehaviour
     //public RaycastHit obj;
 
     // 클리어 조건
-    public bool text_Action_Check = false;
     public bool door_Action_Check = false;
     public bool enemy_Remove_Check = false;
+
+    float curTime = 0;
+    float startTime = 3;
+    bool getStart = false;
 
     //private void Awake()
     //{
@@ -42,33 +45,47 @@ public class EnemyRoom : MonoBehaviour
         {
             if (transform.GetChild(i).name.Contains("Spawn"))
             {
-                // 스포너 전체를 비활성화
                 spawnPool.Add(transform.GetChild(i));
             }
         }
+
+        Player.instance.ps = pState.Attack;
 
     }
 
     void Update()
     {
-        if(spawnPool.Count == 0)
+        if (getStart == false)
+        {
+            curTime += Time.deltaTime;
+
+            if(curTime >= startTime)
+            {
+                curTime = 0;
+                getStart = true;
+            }
+        }
+
+        if (spawnPool.Count == 0 && getStart == true)
         {
             enemy_Remove_Check = true;
+            Player.instance.anim.SetTrigger("IdleMode");
+            Player.instance.ps = pState.Idle;
         }
         else
         {
-            //print(spawnPool.FindIndex(0));
+            Player.instance.ps = pState.Attack;
+            for (int i = 0; i < spawnPool.Count; i++)
+            {
+                if (spawnPool[i].childCount == 0)
+                {
+                    spawnPool.RemoveAt(i);
+                }
+            }
         }
 
 
-
-        if(enemy_Remove_Check == true)
-        {
-            door_Action_Check = true;
-        }
-
-
-        if (text_Action_Check == true && door_Action_Check == true)
+        if (enemy_Remove_Check == true && door_Action_Check == true)
         {
             GameManager.instance.rock = true;
             GameManager.instance.move = true;
@@ -78,8 +95,4 @@ public class EnemyRoom : MonoBehaviour
 
     }
 
-    public void ViewText()
-    {
-        text_Action_Check = true;
-    }
 }

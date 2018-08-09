@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     public static Player instance;// 싱글톤 변수
 
     public Transform rayObject;// 레이로 가리킨 오브젝트
+    public Transform rayObjectclick;// 레이로 가리킨 오브젝트
 
     public float moveSpeed = 10;// 이동 속도
     public float rotSpeed = 300;// 회전 속도
@@ -32,8 +33,9 @@ public class Player : MonoBehaviour
     CharacterController cc;// 캐릭터 컨트롤러 변수
     Ray ray;
     RaycastHit hitInfo;
+    public Animator anim;
 
-    pState ps;
+    public pState ps;
 
     float v;// 수직 움직임
     float h;// 수평 움직임
@@ -61,9 +63,11 @@ public class Player : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.None;
         }
-        cc = transform.GetComponent<CharacterController>();// 캐릭터 컨트롤 동적 할당
 
-        ps = pState.Attack;
+        cc = transform.GetComponent<CharacterController>();// 캐릭터 컨트롤 동적 할당
+        anim = transform.GetComponentInChildren<Animator>();
+
+        ps = pState.Idle;
     }
     #endregion
 
@@ -75,6 +79,7 @@ public class Player : MonoBehaviour
 
         v = Input.GetAxis("Vertical");// 수직 움직임 할당
         h = Input.GetAxis("Horizontal");// 수평 움직임 할당
+
 
         Vector3 lv = transform.forward * v;// 수직 움직임을 앞뒤로 할당
         Vector3 lh = transform.right * h;// 수평 움직임을 좌우로 할당
@@ -104,6 +109,7 @@ public class Player : MonoBehaviour
                 Idle();
                 break;
             case pState.Attack:
+                anim.SetTrigger("AttackMode");
                 Attack();
                 break;
         }
@@ -112,51 +118,63 @@ public class Player : MonoBehaviour
 
     void Idle()
     {
+        if (v != 0 || h != 0)
+        {
+            anim.SetTrigger("IdleMove");
+        }
+        else
+        {
+            anim.SetTrigger("Idle");
+        }
+
         // Fire1키로 공격/상호작용
         if (Input.GetButtonDown("Fire1"))
         {
+            buttonClicked = true;// 버튼을 다운을 했을 때 true
             if (Physics.SphereCast(ray, rayRadius, out hitInfo, idleRange))
             {
-                print(hitInfo.transform.name);
-                if (hitInfo.transform.tag.Equals("Enemy"))
-                {
-                    float mag = (hitInfo.transform.position - transform.position).magnitude;
-                    if (attackRange >= mag)
-                    {
-                        print("hit");
-                        hitInfo.transform.parent.GetComponent<Enemy>().Damaged(User_Manager.power);
-                    }
-                }
+                rayObjectclick = hitInfo.transform;
             }
-        }
 
+        }
+        else
+        {
+            buttonClicked = false;
+        }
+        // Jump키를 땠을 때 false
+        if (Input.GetButtonUp("Fire1"))
+        {
+            buttonClicked = false;
+        }
 
         // Jump키를 눌렀을 때 레이 정보를 얻기
         if (Input.GetButtonDown("Jump"))
         {
-            buttonClicked = true;// 버튼을 다운을 했을 때 true
-            if (Physics.SphereCast(ray, rayRadius, out hitInfo, 4))
-            {
-                rayObject = hitInfo.transform;
-            }
-        }
-        else
-        {
-            buttonClicked = false;// 다운을 누르고 있을 때 false
+
         }
 
         // Jump키를 땠을 때 false
         if (Input.GetButtonUp("Jump"))
         {
-            buttonClicked = false;
+
         }
     }
 
     void Attack()
     {
+        if (v != 0 || h != 0)
+        {
+            anim.SetTrigger("AttackMove");
+        }
+        else
+        {
+            anim.SetTrigger("Attack");
+        }
+
         // Fire1키로 공격/상호작용
         if (Input.GetButtonDown("Fire1"))
         {
+            anim.SetTrigger("AttackSlash");
             if (Physics.SphereCast(ray, rayRadius, out hitInfo, attackRange))
             {
                 print(hitInfo.transform.name);
@@ -171,22 +189,12 @@ public class Player : MonoBehaviour
         // Jump키를 눌렀을 때 레이 정보를 얻기
         if (Input.GetButtonDown("Jump"))
         {
-            buttonClicked = true;// 버튼을 다운을 했을 때 true
             if (Physics.SphereCast(ray, rayRadius, out hitInfo, 1000))
             {
-                rayObject = hitInfo.transform;
+                print(hitInfo.transform.name);
             }
         }
-        else
-        {
-            buttonClicked = false;// 다운을 누르고 있을 때 false
-        }
 
-        // Jump키를 땠을 때 false
-        if (Input.GetButtonUp("Jump"))
-        {
-            buttonClicked = false;
-        }
     }
     #endregion
 }

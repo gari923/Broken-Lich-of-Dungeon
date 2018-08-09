@@ -24,7 +24,6 @@ public class Enemy : MonoBehaviour
     #region 멤버 변수
     public float moveRange = 3f;// 타겟을 따라가는 범위
     public float viewAngle = 90f;// 시야각
-    public float attackRange = 2f;// 공격 범위
     public float pathRange = 0.2f;// 지정한 웨이 포인트와의 거리
     public float idleDelay = 1f;// Idle 상태를 지속할 딜레이
     public float attackDelay = 1f;// 공격 딜레이
@@ -33,16 +32,13 @@ public class Enemy : MonoBehaviour
     public float warningRange = 20;
     public float deadTime = 3f;
     // 적의 정보
-    public float enemy_damage = 100; // 몬스터 공격력
+    public float enemy_damage = 10; // 몬스터 공격력
     public float enemy_hp; // 몬스터 hp
     public float enemy_max_hp = 100; // 몬스터 hp를 초기화
-    public float enemy_drop_exp = 100; // 몬스터가 주는 경험치
     public float enemy_drop_gold = 100; // 몬스터가 주는 골드
     public float attack_range = 2; // 몬스터의 공격 범위
 
     public EState es;// 적 상태
-
-    public bool deadState = false;
 
     NavMeshAgent agent;// 네비 메시 에이전트
     Transform target;// 에이전트의 타겟
@@ -70,7 +66,6 @@ public class Enemy : MonoBehaviour
         wayPoint = transform.parent.parent.Find("WayPoint");// 웨이 포인트 집합 동적 할당
         path = new Transform[wayPoint.childCount];// 웨이 포인트 패스들을 동적 할당
         es = EState.Idle;// 적 상태를 idle 상태로 초기화
-        anim.SetTrigger("Idle");
 
         enemy_hp = enemy_max_hp;
 
@@ -112,14 +107,15 @@ public class Enemy : MonoBehaviour
     #region idle 상태 함수
     void Idle()
     {
-        anim.SetTrigger("Idle");
         curTime += Time.deltaTime;// 경과 시간 할당
+        //anim.SetTrigger("Idle");
 
         // idle 딜레이 이후 move 상태로 전환
         if (curTime >= idleDelay)
         {
             curTime = 0;// 경과 시간 초기화
             es = EState.Move;
+            anim.SetTrigger("Move");
         }
     }
     #endregion
@@ -127,7 +123,6 @@ public class Enemy : MonoBehaviour
     #region move 상태 함수
     void Move()
     {
-        anim.SetTrigger("Move");
         agent.enabled = true;
         mag = Vector3.Distance(target.position,
             transform.position);// 플레이어와 적 사이의 거리
@@ -158,11 +153,11 @@ public class Enemy : MonoBehaviour
                     agent.destination = target.position;
                     //print(agent.remainingDistance);
                     // 공격 가능 거리에 도달하면 공격으로 상태로 전환
-                    if (attackRange >= mag)
+                    if (attack_range >= mag)
                     {
                         curTime = attackDelay;
                         agent.enabled = false;
-                        es = EState.Attack;
+                        es = EState.Attack;                       
                     }
                 }
                 // 장애물 유
@@ -325,19 +320,19 @@ public class Enemy : MonoBehaviour
         if (curTime >= attackDelay)
         {
             // 플레이어에게 데미지를 준다.
-            if (attackRange <= mag)
+            if (attack_range >= mag)
             {
-                es = EState.Move;
                 curTime = 0;// 경과 시간 초기화
+                anim.SetTrigger("Attack");
             }
             else
             {
-                print("attack");
-                anim.SetTrigger("Attack");
+                es = EState.Move;
+                anim.SetTrigger("Move");
                 curTime = 0;// 경과 시간 초기화
-
             }
         }
+
     }
     #endregion
 
@@ -347,59 +342,58 @@ public class Enemy : MonoBehaviour
         agent.enabled = false;
         EnemyAngle();
 
-        if (deadState)
+        if (enemy_hp <= 0)
         {
-
+            es = EState.Dead;
+            anim.SetTrigger("Dead");
+            transform.GetComponent<CapsuleCollider>().enabled = false;
         }
         else
         {
-            if (enemy_hp > 0)
+            anim.SetTrigger("Damage");
+
+            if (radi >= viewAngle)
             {
-                anim.SetTrigger("Damage");
-                if (radi >= viewAngle)
+                enemy_hp -= damage * 2;
+                //es = EState.Warning;
+
+                print(transform.parent.childCount);
+                for (int i = 0; i < transform.parent.childCount; i++)
                 {
-                    enemy_hp -= damage * 2;
-                    //es = EState.Warning;
+                    float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
 
-                    print(transform.parent.childCount);
-                    for (int i = 0; i < transform.parent.childCount; i++)
+                    if (friendMag <= warningRange)
                     {
-                        float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
-
-                        if (friendMag <= warningRange)
+                        if (transform.parent.GetChild(i).gameObject == gameObject)
                         {
-                            if (transform.parent.GetChild(i).gameObject == gameObject)
-                            {
-                                print("!!");
-                                es = EState.Warning;
-                            }
-                            else
-                            {
-                                transform.parent.GetChild(i).GetComponent<Enemy>().es = EState.Warning;
-                            }
-
+                            transform.LookAt(target);
+                            es = EState.Move;
+                            anim.SetTrigger("Move");
                         }
+                        else
+                        {
+                            transform.parent.GetChild(i).GetComponent<Enemy>().es = EState.Warning;
+                        }
+
                     }
                 }
-                else
-                {
-                    enemy_hp -= damage;
-                    es = EState.Move;
-                }
-
-                // 만약 시야범위 내에 플레이어가 없는데 공격을 당하면 데미지 두배(백어택)
-                // 받은 즉시 플레이어의 위치로 destination을 바꾼다.
-
-                // 피격된 적에서 부터의 범위 내에 다른 적이 있을 시 해당 적의 destination을 플레이어로 바꾼다.
-                // move안에 warning 만들기
-                // 도착한 뒤에는 move 상태로 바꾼다.(moveMag 안에 들어올 시 move 상태로 전환)
             }
             else
             {
-                es = EState.Dead;
-                deadState = true;
+                enemy_hp -= damage;
+                es = EState.Move;
+                anim.SetTrigger("Move");
             }
+
+            // 만약 시야범위 내에 플레이어가 없는데 공격을 당하면 데미지 두배(백어택)
+            // 받은 즉시 플레이어의 위치로 destination을 바꾼다.
+
+            // 피격된 적에서 부터의 범위 내에 다른 적이 있을 시 해당 적의 destination을 플레이어로 바꾼다.
+            // move안에 warning 만들기
+            // 도착한 뒤에는 move 상태로 바꾼다.(moveMag 안에 들어올 시 move 상태로 전환)
+
         }
+
     }
     #endregion
 
@@ -409,7 +403,6 @@ public class Enemy : MonoBehaviour
            transform.position);// 플레이어와 적 사이의 거리
 
         EnemyAngle();
-
         // 시야와 거리 안에 들어오면 move 상태로 바꾼다.
         if (radi <= viewAngle)
         {
@@ -417,36 +410,30 @@ public class Enemy : MonoBehaviour
             {
                 agent.destination = agent.pathEndPosition;
                 es = EState.Move;
-                print("move");
+                anim.SetTrigger("Move");
             }
         }
         // 플레이어를 쫓는다.
         else
         {
-
             agent.destination = target.position;
-
         }
     }
 
     #region dead 상태 함수
     void Dead()
     {
-        if (deadState)
-        {
-            StartCoroutine("DeadProcess");
-            deadState = false;
-        }
-        else
-        {
-            deadState = false;
-        }
+        curTime = 0;
+
+        User_Manager.gold += enemy_drop_gold;
+        StartCoroutine("DeadProcess");
     }
+
+
     #endregion
 
     IEnumerator DeadProcess()
     {
-        anim.SetTrigger("Dead");
         yield return new WaitForSeconds(deadTime);
 
         Destroy(gameObject);
