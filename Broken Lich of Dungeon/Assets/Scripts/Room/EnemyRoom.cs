@@ -58,8 +58,8 @@ public class EnemyRoom : MonoBehaviour
         if (getStart == false)
         {
             curTime += Time.deltaTime;
-
-            if(curTime >= startTime)
+            Player.instance.anim.SetTrigger("AttackMode");
+            if (curTime >= startTime)
             {
                 curTime = 0;
                 getStart = true;
@@ -85,7 +85,7 @@ public class EnemyRoom : MonoBehaviour
         }
 
 
-        if (enemy_Remove_Check == true && door_Action_Check == true)
+        if (enemy_Remove_Check == true)
         {
             GameManager.instance.rock = true;
             GameManager.instance.move = true;

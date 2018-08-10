@@ -111,7 +111,6 @@ public class Player : MonoBehaviour
                 Idle();
                 break;
             case pState.Attack:
-                anim.SetTrigger("AttackMode");
                 Attack();
                 break;
         }
@@ -179,10 +178,10 @@ public class Player : MonoBehaviour
             anim.SetTrigger("AttackSlash");
             if (Physics.SphereCast(ray, rayRadius, out hitInfo, attackRange))
             {
-                print(hitInfo.transform.name);
+                //print(hitInfo.transform.name);
                 if (hitInfo.transform.tag.Equals("Enemy"))
                 {
-                    hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.power);
+                    hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
                 }
             }
         }

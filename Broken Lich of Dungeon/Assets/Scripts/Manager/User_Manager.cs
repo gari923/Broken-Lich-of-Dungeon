@@ -1,5 +1,8 @@
 ﻿#region 네임스페이스
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
 #endregion
 
 /// <summary>
@@ -10,6 +13,8 @@ public class User_Manager : MonoBehaviour
     #region 멤버 변수
     //attack = power*2 + weapon
     //hp = health *20
+
+    public static User_Manager instance;
 
     public static float gold;//유저의 소지 골드
 
@@ -28,6 +33,20 @@ public class User_Manager : MonoBehaviour
     public static string weapon_slot;// 장비 슬롯
     #endregion
 
+    public GameObject damagedFX;
+    public Image hpFX;
+
+    Color tempColor;
+
+    private void Awake()
+    {
+        if(instance == null)
+        {
+            instance = this;
+        }
+    }
+
+
     #region 시작 함수
     void Start()
     {
@@ -41,13 +60,36 @@ public class User_Manager : MonoBehaviour
         max_hp = health * 20;
 
         hp = max_hp;//hp를 최대치로 초기화
+
+        tempColor = new Color();
     }
     #endregion
 
     #region 업데이트 함수
     void Update()
     {
-        
+
     }
     #endregion
+
+    public void Damaged()
+    {
+        //print(hp);
+        //print(tempColor.a);
+
+
+        tempColor = hpFX.color;
+        tempColor.a = 1 - hp / max_hp;
+        hpFX.color = tempColor;
+
+        StartCoroutine("DamageProcess");
+    }
+
+    IEnumerator DamageProcess()
+    {
+        damagedFX.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        damagedFX.SetActive(false);
+    }
+    
 }

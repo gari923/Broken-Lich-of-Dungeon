@@ -123,6 +123,7 @@ public class Enemy : MonoBehaviour
     #region move 상태 함수
     void Move()
     {
+        anim.SetTrigger("Move");
         agent.enabled = true;
         mag = Vector3.Distance(target.position,
             transform.position);// 플레이어와 적 사이의 거리
@@ -155,9 +156,9 @@ public class Enemy : MonoBehaviour
                     // 공격 가능 거리에 도달하면 공격으로 상태로 전환
                     if (attack_range >= mag)
                     {
-                        curTime = attackDelay;
+                        curTime = attackDelay/2;
                         agent.enabled = false;
-                        es = EState.Attack;                       
+                        es = EState.Attack;
                     }
                 }
                 // 장애물 유
@@ -220,7 +221,10 @@ public class Enemy : MonoBehaviour
                     {
                         agent.destination = agent.pathEndPosition;
                     }
-                    NewWayPoint();
+                    else
+                    {
+                        NewWayPoint();
+                    }
                 }
                 // 장애물 바깥쪽
                 else
@@ -229,7 +233,10 @@ public class Enemy : MonoBehaviour
                     {
                         agent.destination = agent.pathEndPosition;
                     }
-                    agent.destination = agent.pathEndPosition;
+                    else
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
                 }
             }
             //거리 바깥쪽
@@ -242,7 +249,10 @@ public class Enemy : MonoBehaviour
                     {
                         agent.destination = agent.pathEndPosition;
                     }
-                    NewWayPoint();
+                    else
+                    {
+                        NewWayPoint();
+                    }
                 }
                 //장애물 바깥쪽
                 else
@@ -251,7 +261,10 @@ public class Enemy : MonoBehaviour
                     {
                         agent.destination = agent.pathEndPosition;
                     }
-                    agent.destination = agent.pathEndPosition;
+                    else
+                    {
+                        agent.destination = agent.pathEndPosition;
+                    }
                 }
             }
         }
@@ -323,6 +336,9 @@ public class Enemy : MonoBehaviour
             if (attack_range >= mag)
             {
                 curTime = 0;// 경과 시간 초기화
+                // 플레이어 피깎
+                User_Manager.hp -= enemy_damage;
+                User_Manager.instance.Damaged();
                 anim.SetTrigger("Attack");
             }
             else
@@ -357,7 +373,7 @@ public class Enemy : MonoBehaviour
                 enemy_hp -= damage * 2;
                 //es = EState.Warning;
 
-                print(transform.parent.childCount);
+                //print(transform.parent.childCount);
                 for (int i = 0; i < transform.parent.childCount; i++)
                 {
                     float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
@@ -367,8 +383,6 @@ public class Enemy : MonoBehaviour
                         if (transform.parent.GetChild(i).gameObject == gameObject)
                         {
                             transform.LookAt(target);
-                            es = EState.Move;
-                            anim.SetTrigger("Move");
                         }
                         else
                         {
@@ -377,6 +391,8 @@ public class Enemy : MonoBehaviour
 
                     }
                 }
+                es = EState.Move;
+                anim.SetTrigger("Move");
             }
             else
             {
@@ -417,12 +433,14 @@ public class Enemy : MonoBehaviour
         else
         {
             agent.destination = target.position;
+            anim.SetTrigger("Move");
         }
     }
 
     #region dead 상태 함수
     void Dead()
     {
+        agent.enabled = false;
         curTime = 0;
 
         User_Manager.gold += enemy_drop_gold;
