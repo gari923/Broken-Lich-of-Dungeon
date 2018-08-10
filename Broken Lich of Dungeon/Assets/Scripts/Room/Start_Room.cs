@@ -20,28 +20,24 @@ public class Start_Room : MonoBehaviour
     public GameObject start_Room;
 
     // 클리어 조건
-    public bool text_Action_Check = false;
     public bool door_Action_Check = false;
 
     void Start()
     {
         Player.instance.ps = pState.Idle;
-
+        GameManager.instance.rock = true;//방의 클리어 조건을 완료시킨다
     }
 
     void Update()
     {
         //방의 기믹들을 작동시키고 싶다
-        //만약 버튼이 클릭되었고 레이가 Start_Text에 닿았다면
+        //만약 버튼이 클릭되었고 레이가 door에 닿았다면
         if (Player.instance.buttonClicked)
         {
             if (Player.instance.rayObjectclick)
             {
                 switch (Player.instance.rayObjectclick.name)
                 {
-                    case "Start_Text":
-                        ViewText();
-                        break;
                     case "Door":
                         OpenDoor();
                         break;
@@ -49,36 +45,16 @@ public class Start_Room : MonoBehaviour
             }
         }
 
-        //방의 클리어 조건을 완료했다면
+        //방의 클리어 조건을 완료했고 문을 동작시켰다면
         if (GameManager.instance.rock == true && door_Action_Check == true)
         {
             GameManager.instance.move = true;
             start_Room.SetActive(false);
         }
     }
-    void ViewText()
-    {
-        //메모지를 봅니다.
-        text_Action_Check = true;
-        print(" 1.방은 렌덤으로 이동할 수 있다.");
-        print(" 2.같은 방은 들어갈 수 없다.동작");
-        print(" 3.모든 방을 전부 돌면 마지막 방에 도달할 수 있다.");
-        print(" 4.각 방의 규칙을 따라 방을 클리어 해야 한다.");
-        print(" 5.잃어버린 무언가가 가장 소중한 법이다.");
-        //문의 잠금장치를 해제한다
-        GameManager.instance.rock = true;
-    }
+    
     void OpenDoor()
-    {
-        //만약 작동했다면 작동했다고 보낸다
-        if (text_Action_Check == true)
-        {
+    { 
             door_Action_Check = true;
-            print("문을 엽니다.");
-        }
-        else
-        {
-            print("잠겨있습니다");
-        }
     }
 }

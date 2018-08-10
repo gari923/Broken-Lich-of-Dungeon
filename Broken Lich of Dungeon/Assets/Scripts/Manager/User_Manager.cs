@@ -31,6 +31,8 @@ public class User_Manager : MonoBehaviour
 
     //유저의 장비
     public static string weapon_slot;// 장비 슬롯
+    //장착한 장비의 데미지
+    public static float weapon_Damage;
     #endregion
 
     public GameObject damagedFX;
@@ -52,16 +54,20 @@ public class User_Manager : MonoBehaviour
     {
         gold = 0;//돈을 0으로 초기화
         LV = 1; //LV을 1로 초기화
-        hp = max_hp;//hp를 최대치로 초기화
         //스텟 초기화
         power = 5;
         health = 5;
-        attack = power * 2 + Item_Manager.weapon_Damage;
+        //스텟공식
+        attack = power * 2 + weapon_Damage;
         max_hp = health * 20;
 
         hp = max_hp;//hp를 최대치로 초기화
+<<<<<<< HEAD
 
         tempColor = new Color();
+=======
+        weapon_Damage = Item_Manager.weapon_Damage;//무기 데미지를 장착 아이템의 데미지로 수정
+>>>>>>> origin/yudahee
     }
     #endregion
 
