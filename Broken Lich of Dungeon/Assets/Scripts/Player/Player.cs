@@ -181,8 +181,15 @@ public class Player : MonoBehaviour
                 //print(hitInfo.transform.name);
                 if (hitInfo.transform.tag.Equals("Enemy"))
                 {
+<<<<<<< HEAD
                     hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
                 }
+=======
+                    hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.power);
+                    
+                }                
+                hitInfo.transform.SendMessage("DamageOrNot");
+>>>>>>> origin/tails007
             }
         }
 

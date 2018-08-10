@@ -17,11 +17,11 @@ enum BossState
 public class SampleBoss : MonoBehaviour
 {
     #region 멤버 변수
-    Transform player;// 플레이어
     public Transform dustSmoke;// 폭파 예측 위치 이펙트
     public Transform explosion;// 폭파 이펙트
     public Transform shockWave;// 점프 공격 이펙트
     public ParticleSystem tornado;// 등장, 퇴장 토네이도 이펙트
+    public ParticleSystem chain;// 총 데미지의 1/3 깎일때마다 이펙트
 
     public float apearRotate = 2F;// 대기상태 딜레이
     public float maxHP = 100F;// 최대 HP
@@ -34,16 +34,18 @@ public class SampleBoss : MonoBehaviour
     public float jumpSpeed = 5F;// 점프 스피드
     public float moveSpeed = 3F;// 움직이는 속도
     public float chaseSpeed = 6F;// 쫒아가는 속도
+    public float damagedCool = 1F;// 대미지를 받고 기다리는 쿨타임
 
     public bool isInvincible = false;// 무적 판정
 
-
+    Transform player;// 플레이어
     Animator animator;// 애니메이터
     NavMeshAgent agent;// 내브 메시 에이전트
     BossState bossState;// 현재 보스 상태
     float curTime;// 경과 시간
-    float damagedCool;// 대미지를 받고 기다리는 쿨타임
     bool isRunning;// 달리고 있는지
+    bool isTwoThird;
+    bool isOneThird;
     #endregion
 
     #region 시작 함수
@@ -57,6 +59,9 @@ public class SampleBoss : MonoBehaviour
         hP = maxHP;// 체력 채워넣기
         StartCoroutine("Appear");// 등장
         animator.SetTrigger("idle");
+        isRunning = false;
+        isTwoThird = true;
+        isOneThird = true;
     }
     #endregion
 
@@ -80,9 +85,9 @@ public class SampleBoss : MonoBehaviour
 
         // 앞으로 다가가기/////////////////////
         curTime = 0;
-        while (curTime < 1F)
+        while (curTime < 0.5F)
         {
-            transform.Translate(-transform.forward * 0.5F);
+            transform.Translate(-transform.forward * 0.2F);
             yield return new WaitForEndOfFrame();
         }
         tornado.gameObject.SetActive(false);
@@ -106,14 +111,7 @@ public class SampleBoss : MonoBehaviour
     void Update()
     {
         curTime += Time.deltaTime;
-
-        // 무적 상태가 아니고, 플레이어가 대미지를 주면 피격상태
-        if (!isInvincible)
-        {
-            curTime = 0;
-            bossState = BossState.Damaged;
-        }
-
+                
         // 상태에 따른 함수 실행
         switch (bossState)
         {
@@ -147,6 +145,7 @@ public class SampleBoss : MonoBehaviour
         print("Idle");//////
         StopAllCoroutines();
         animator.SetTrigger("idle");
+        isInvincible = false;
 
         if (curTime >= idle2CombatTime)
         {
@@ -163,6 +162,7 @@ public class SampleBoss : MonoBehaviour
     {
         print("combat");//////
         animator.SetTrigger("combat");
+        isInvincible = false;
 
         StartCoroutine("LookPlayer");// 플레이어 바라보기
 
@@ -197,9 +197,7 @@ public class SampleBoss : MonoBehaviour
         print("Pattern1");//////
         StartCoroutine("LookPlayer");// 플레이어를 바라본다
         yield return new WaitForSeconds(1);
-
-
-
+                
         // 8초간 플레이어 추적//////
         curTime = 0;
         while (curTime <= 8F)
@@ -211,10 +209,10 @@ public class SampleBoss : MonoBehaviour
 
         StopTrace();// 추적 중단
         StopCoroutine("LookPlayer");// 플레이어를 바라보기
-
+                
         animator.SetTrigger("attack");// 공격모션
         yield return new WaitForSeconds(2F);
-
+        
         // 초기화 작업////////////////////
         curTime = 0;
         animator.ResetTrigger("attack");
@@ -294,11 +292,15 @@ public class SampleBoss : MonoBehaviour
 
         // 플레이어 따라가기/////////////////////
         curTime = 0;
+        Vector3 target = getTargetPosition();
         while (curTime < 10F)
         {
-            Vector3 target = getTargetPosition();
-            Vector3 direction = (target - transform.position).normalized;
-            transform.position += direction * Time.deltaTime * chaseSpeed;
+            if (Vector3.Distance(transform.position, target) > 0.01F)
+            {
+                target = getTargetPosition();
+                Vector3 direction = (target - transform.position).normalized;
+                transform.position += direction * Time.deltaTime * chaseSpeed;
+            }
             yield return new WaitForEndOfFrame();
         }
         yield return new WaitForSeconds(0.5F);
@@ -338,14 +340,63 @@ public class SampleBoss : MonoBehaviour
     void Damaged()
     {
         print("Damaged");//////
+        StopAllCoroutines();
         animator.SetTrigger("damage");
         isInvincible = true;// 무적상태로 만들기
-        // HP가 0이 되면 죽음 상태
-        if (curTime >= 2F && hP <= 0)
+
+        hP -= 1F;
+
+        // 피해 입고 쿨타임
+        if (curTime >= damagedCool)
         {
+            print("dtd");
+            if (hP / maxHP <= 0F)
+            {
+                bossState = BossState.Dead;
+            }
+            else if (hP / maxHP <= 0.33F && isOneThird)
+            {
+                isOneThird = false;
+                bossState = BossState.Wait;
+            }
+            else if (hP / maxHP <= 0.66F && isTwoThird)
+            {
+                isTwoThird = false;
+                bossState = BossState.Wait;
+            }
+            else
+            {
+                bossState = BossState.Idle;
+            }
             curTime = 0;
-            bossState = BossState.Dead;
         }
+    }
+
+    IEnumerator ThirdDamaged()
+    {
+        // 점프///////////////////////////////////////////////////////////////////
+        Vector3 jumpPosition = transform.position + new Vector3(0, jumpHight, 0);
+        while (transform.position.y < jumpPosition.y - 0.1F)
+        {
+            transform.position = Vector3.Slerp(transform.position,
+                jumpPosition, Time.deltaTime * jumpSpeed);
+            yield return new WaitForEndOfFrame();
+        }
+        /////////////////////////////////////////////////////////////////////////
+
+        Vector3 teleportZone = new Vector3(20, 0, 0);
+        transform.localPosition = teleportZone;
+        chain.gameObject.SetActive(true);
+        chain.Play();
+
+        yield return new WaitForSeconds(2F);
+
+        chain.Stop();
+
+        bossState = BossState.Idle;
+        curTime = 0;
+        animator.ResetTrigger("damage");
+        yield return new WaitForSeconds(1F);
     }
     #endregion
 
@@ -426,4 +477,17 @@ public class SampleBoss : MonoBehaviour
                 transform.position.y, player.position.z);
     }
     #endregion
+
+    void DamageOrNot()
+    {        
+        print("댐낫");
+        if (!isInvincible)
+        {
+            curTime = 0;
+            animator.ResetTrigger("idle");
+            animator.ResetTrigger("attack");
+            animator.ResetTrigger("combat");
+            bossState = BossState.Damaged;
+        }
+    }
 }
