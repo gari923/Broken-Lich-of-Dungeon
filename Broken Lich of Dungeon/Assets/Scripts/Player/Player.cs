@@ -23,7 +23,7 @@ public class Player : MonoBehaviour
 
     public float moveSpeed = 10;// 이동 속도
     public float rotSpeed = 300;// 회전 속도
-    public float rayRadius = 0.001f;// 레이 반경
+    public float rayRadius = 0.1f;// 레이 반경
     public float attackRange = 2f;
     public float idleRange = 5f;
     public float siteRange = 4f;
