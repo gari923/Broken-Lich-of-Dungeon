@@ -59,14 +59,14 @@ public class EnemyRoom : MonoBehaviour
         {
             curTime += Time.deltaTime;
 
-            if(curTime >= startTime)
+            if (curTime >= startTime)
             {
                 curTime = 0;
                 getStart = true;
             }
         }
 
-        if (spawnPool.Count == 0 && getStart == true)
+        if (spawnPool.Count == 0 && getStart == true && !GameObject.Find("SampleBossPhase1").activeSelf)
         {
             enemy_Remove_Check = true;
             Player.instance.anim.SetTrigger("IdleMode");
@@ -83,7 +83,6 @@ public class EnemyRoom : MonoBehaviour
                 }
             }
         }
-
 
         if (enemy_Remove_Check == true && door_Action_Check == true)
         {

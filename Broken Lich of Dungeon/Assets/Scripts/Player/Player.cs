@@ -183,7 +183,9 @@ public class Player : MonoBehaviour
                 if (hitInfo.transform.tag.Equals("Enemy"))
                 {
                     hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.power);
-                }
+                    
+                }                
+                hitInfo.transform.SendMessage("DamageOrNot");
             }
         }
 
