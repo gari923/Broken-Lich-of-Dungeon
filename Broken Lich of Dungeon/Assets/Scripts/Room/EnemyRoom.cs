@@ -66,11 +66,7 @@ public class EnemyRoom : MonoBehaviour
             }
         }
 
-<<<<<<< HEAD
         if (spawnPool.Count == 0 && getStart == true)
-=======
-        if (spawnPool.Count == 0 && getStart == true && GameObject.Find("SampleBossPhase1") == null)
->>>>>>> origin/tails007
         {
             enemy_Remove_Check = true;
             Player.instance.anim.SetTrigger("IdleMode");
