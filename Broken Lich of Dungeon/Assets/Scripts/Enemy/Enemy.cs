@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 #endregion
 
 #region 적 상태
@@ -39,6 +40,9 @@ public class Enemy : MonoBehaviour
     public float attack_range = 2; // 몬스터의 공격 범위
 
     public EState es;// 적 상태
+
+    public Canvas HP_Can;
+    public Slider HP_Bar;
 
     NavMeshAgent agent;// 네비 메시 에이전트
     Transform target;// 에이전트의 타겟
@@ -101,6 +105,13 @@ public class Enemy : MonoBehaviour
                 Dead();
                 break;
         }
+
+
+        HP_Bar.value = enemy_hp / enemy_max_hp;
+
+        // hp_bar의 방향이 플레이어(카메라)쪽을 바라보게 고정
+        HP_Can.transform.LookAt(Camera.main.transform.position);
+
     }
     #endregion
 
@@ -156,7 +167,7 @@ public class Enemy : MonoBehaviour
                     // 공격 가능 거리에 도달하면 공격으로 상태로 전환
                     if (attack_range >= mag)
                     {
-                        curTime = attackDelay/2;
+                        curTime = attackDelay / 1.5f;
                         agent.enabled = false;
                         es = EState.Attack;
                     }
@@ -358,56 +369,53 @@ public class Enemy : MonoBehaviour
         agent.enabled = false;
         EnemyAngle();
 
+        anim.SetTrigger("Damage");
+
+        if (radi >= viewAngle)
+        {
+            enemy_hp -= damage * 2;
+            //es = EState.Warning;
+
+            //print(transform.parent.childCount);
+            for (int i = 0; i < transform.parent.childCount; i++)
+            {
+                float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
+
+                if (friendMag <= warningRange)
+                {
+                    if (transform.parent.GetChild(i).gameObject == gameObject)
+                    {
+                        transform.LookAt(target);
+                    }
+                    else
+                    {
+                        transform.parent.GetChild(i).GetComponent<Enemy>().es = EState.Warning;
+                    }
+
+                }
+            }
+            es = EState.Move;
+            anim.SetTrigger("Move");
+        }
+        else
+        {
+            enemy_hp -= damage;
+            es = EState.Move;
+            anim.SetTrigger("Move");
+        }
+
+        // 만약 시야범위 내에 플레이어가 없는데 공격을 당하면 데미지 두배(백어택)
+        // 받은 즉시 플레이어의 위치로 destination을 바꾼다.
+
+        // 피격된 적에서 부터의 범위 내에 다른 적이 있을 시 해당 적의 destination을 플레이어로 바꾼다.
+        // move안에 warning 만들기
+        // 도착한 뒤에는 move 상태로 바꾼다.(moveMag 안에 들어올 시 move 상태로 전환)
+
         if (enemy_hp <= 0)
         {
             es = EState.Dead;
             anim.SetTrigger("Dead");
             transform.GetComponent<CapsuleCollider>().enabled = false;
-        }
-        else
-        {
-            anim.SetTrigger("Damage");
-
-            if (radi >= viewAngle)
-            {
-                enemy_hp -= damage * 2;
-                //es = EState.Warning;
-
-                //print(transform.parent.childCount);
-                for (int i = 0; i < transform.parent.childCount; i++)
-                {
-                    float friendMag = (transform.parent.GetChild(i).transform.position - transform.position).magnitude;
-
-                    if (friendMag <= warningRange)
-                    {
-                        if (transform.parent.GetChild(i).gameObject == gameObject)
-                        {
-                            transform.LookAt(target);
-                        }
-                        else
-                        {
-                            transform.parent.GetChild(i).GetComponent<Enemy>().es = EState.Warning;
-                        }
-
-                    }
-                }
-                es = EState.Move;
-                anim.SetTrigger("Move");
-            }
-            else
-            {
-                enemy_hp -= damage;
-                es = EState.Move;
-                anim.SetTrigger("Move");
-            }
-
-            // 만약 시야범위 내에 플레이어가 없는데 공격을 당하면 데미지 두배(백어택)
-            // 받은 즉시 플레이어의 위치로 destination을 바꾼다.
-
-            // 피격된 적에서 부터의 범위 내에 다른 적이 있을 시 해당 적의 destination을 플레이어로 바꾼다.
-            // move안에 warning 만들기
-            // 도착한 뒤에는 move 상태로 바꾼다.(moveMag 안에 들어올 시 move 상태로 전환)
-
         }
 
     }

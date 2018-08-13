@@ -66,7 +66,7 @@ public class EnemyRoom : MonoBehaviour
             }
         }
 
-        if (spawnPool.Count == 0 && getStart == true && !GameObject.Find("SampleBossPhase1").activeSelf)
+        if (spawnPool.Count == 0 && getStart == true)
         {
             enemy_Remove_Check = true;
             Player.instance.anim.SetTrigger("IdleMode");
