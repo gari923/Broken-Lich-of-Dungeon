@@ -62,12 +62,8 @@ public class User_Manager : MonoBehaviour
         max_hp = health * 20;
 
         hp = max_hp;//hp를 최대치로 초기화
-<<<<<<< HEAD
 
         tempColor = new Color();
-=======
-        weapon_Damage = Item_Manager.weapon_Damage;//무기 데미지를 장착 아이템의 데미지로 수정
->>>>>>> origin/yudahee
     }
     #endregion
 
