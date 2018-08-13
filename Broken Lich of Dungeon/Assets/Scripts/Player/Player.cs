@@ -191,12 +191,18 @@ public class Player : MonoBehaviour
                 anim.SetTrigger("AttackSlash");
                 if (Physics.SphereCast(ray, rayRadius, out hitInfo, attackRange))
                 {
+<<<<<<< HEAD
                     //print(hitInfo.transform.name);
                     if (hitInfo.transform.tag.Equals("Enemy"))
                     {
                         hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
                     }
                 }
+=======
+                    hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
+                }
+                hitInfo.transform.SendMessage("DamageOrNot");
+>>>>>>> origin/tails007
             }
         }
         else
