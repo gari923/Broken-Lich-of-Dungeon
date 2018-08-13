@@ -39,10 +39,13 @@ public class GameManager : MonoBehaviour
 
     GameObject player;// 플레이어
 
+
     // 다른 방으로 갈수 있는지 확인하는 변수(각 방에서 조건을 완료시키면 true)
     public bool rock = false;
     // 플레이어가 이동의 상호작용을 활성화 확인(각 방에서 이동 상호작용을 누르면 true)
     public bool move = false;
+    // 방클리어 확인하는 변수
+    public bool clear = false;
     #endregion
 
     #region 어웨이크 함수
@@ -163,6 +166,28 @@ public class GameManager : MonoBehaviour
                     }
                     break;
             }     
+        }
+        // 유저가 죽었을경우
+        if (User_Manager.alive == false)
+        {
+            //방을 초기화 한다
+            start_Check = false;
+            last_Check = false;
+            enemy_Check = true;
+            patience_Check = true;
+            knife_Check = true;
+            projectile_Check = true;
+            door_Check = true;
+            User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
+            player.transform.position
+                            = start_Room_StartPoint.transform.position;// 플레이어를 처음있던 방의 좌표로 이동
+        }
+        // 방을 클리어했을경우
+        if (User_Manager.alive == true && clear == true)
+        {
+            User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
+            player.transform.position
+                            = start_Room_StartPoint.transform.position;// 플레이어를 처음있던 방의 좌표로 이동
         }
     }
     #endregion

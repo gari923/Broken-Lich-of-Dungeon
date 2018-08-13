@@ -34,6 +34,7 @@ public class Player : MonoBehaviour
     public float attackSpeed = 2f;// 플레이어 공격 속도
     public bool IsLocked = false;// 마우스 락 확인
     public bool buttonClicked = true;// 버튼 클릭 확인
+    public bool status = false;// 플레이어의 스테이터스 확인
 
     CharacterController cc;// 캐릭터 컨트롤러 변수
     Ray ray; // 레이 발사
@@ -163,13 +164,13 @@ public class Player : MonoBehaviour
         // Jump키를 눌렀을 때 레이 정보를 얻기
         if (Input.GetButtonDown("Jump"))
         {
-
+            status = true;
         }
 
         // Jump키를 땠을 때 false
         if (Input.GetButtonUp("Jump"))
         {
-
+            status = false;
         }
     }
 
