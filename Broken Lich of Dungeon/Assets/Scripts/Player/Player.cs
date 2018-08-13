@@ -1,5 +1,6 @@
 ﻿#region 네임스페이스
 using UnityEngine;
+using UnityEngine.UI;
 #endregion
 
 #region 플레이어 상태
@@ -20,25 +21,32 @@ public class Player : MonoBehaviour
 
     public Transform rayObject;// 레이로 가리킨 오브젝트
     public Transform rayObjectclick;// 레이로 가리킨 오브젝트
+    public GameObject gvrRectPointer;// idle상태에서 보여줄 클릭용 UI
+    public GameObject coolTimeCanvas;// attack 상태에서 보여줄 쿨타임 게이지
+    public Animator anim;// 플레이어 애니메이션
 
     public float moveSpeed = 10;// 이동 속도
     public float rotSpeed = 300;// 회전 속도
     public float rayRadius = 0.1f;// 레이 반경
-    public float attackRange = 2f;
-    public float idleRange = 5f;
-    public float siteRange = 4f;
+    public float attackRange = 2f;// 공격 범위
+    public float idleRange = 5f;// idle 상태에서의 선택을 위한 거리
+    public float siteRange = 4f;// 유니티짱을 인식시키기 위한 시야 거리
+    public float attackSpeed = 2f;// 플레이어 공격 속도
     public bool IsLocked = false;// 마우스 락 확인
     public bool buttonClicked = true;// 버튼 클릭 확인
+    public bool status = false;// 플레이어의 스테이터스 확인
 
     CharacterController cc;// 캐릭터 컨트롤러 변수
-    Ray ray;
-    RaycastHit hitInfo;
-    public Animator anim;
+    Ray ray; // 레이 발사
+    RaycastHit hitInfo;// 레이 정보 담기
+    Image coolTimeImg;// 쿨타임 이미지 담기
 
-    public pState ps;
+    public pState ps;// 플레이어 상태 enum
 
     float v;// 수직 움직임
     float h;// 수평 움직임
+    float coolTime;
+    bool attackCheck;
 
     #endregion
 
@@ -66,6 +74,7 @@ public class Player : MonoBehaviour
 
         cc = transform.GetComponent<CharacterController>();// 캐릭터 컨트롤 동적 할당
         anim = transform.GetComponentInChildren<Animator>();
+        coolTimeImg = coolTimeCanvas.transform.GetComponentInChildren<Image>();
 
         ps = pState.Idle;
     }
@@ -119,6 +128,10 @@ public class Player : MonoBehaviour
 
     void Idle()
     {
+
+        gvrRectPointer.SetActive(true);
+        coolTimeCanvas.SetActive(false);
+
         if (v != 0 || h != 0)
         {
             anim.SetTrigger("IdleMove");
@@ -151,42 +164,61 @@ public class Player : MonoBehaviour
         // Jump키를 눌렀을 때 레이 정보를 얻기
         if (Input.GetButtonDown("Jump"))
         {
-
+            status = true;
         }
 
         // Jump키를 땠을 때 false
         if (Input.GetButtonUp("Jump"))
         {
-
+            status = false;
         }
     }
 
     void Attack()
     {
-        if (v != 0 || h != 0)
-        {
-            anim.SetTrigger("AttackMove");
-        }
-        else
-        {
-            anim.SetTrigger("Attack");
-        }
+        anim.SetTrigger("Attack");
 
-        // Fire1키로 공격/상호작용
-        if (Input.GetButtonDown("Fire1"))
+        gvrRectPointer.SetActive(false);
+        coolTimeCanvas.SetActive(true);
+
+        if (attackCheck)
         {
-            anim.SetTrigger("AttackSlash");
-            if (Physics.SphereCast(ray, rayRadius, out hitInfo, attackRange))
+            // Fire1키로 공격/상호작용
+            if (Input.GetButtonDown("Fire1"))
             {
-                //print(hitInfo.transform.name);
-                if (hitInfo.transform.tag.Equals("Enemy"))
+                attackCheck = false;
+                coolTime = 0;
+
+                anim.SetTrigger("AttackSlash");
+                if (Physics.SphereCast(ray, rayRadius, out hitInfo, attackRange))
                 {
+<<<<<<< HEAD
+                    //print(hitInfo.transform.name);
+                    if (hitInfo.transform.tag.Equals("Enemy"))
+                    {
+                        hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
+                    }
+                }
+=======
                     hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
                 }
                 hitInfo.transform.SendMessage("DamageOrNot");
+>>>>>>> origin/tails007
             }
         }
+        else
+        {
+            coolTime += Time.deltaTime;
 
+            if (coolTime >= attackSpeed)
+            {
+                attackCheck = true;
+            }
+            else
+            {
+                coolTimeImg.fillAmount = coolTime / attackSpeed;
+            }
+        }
 
         // Jump키를 눌렀을 때 레이 정보를 얻기
         if (Input.GetButtonDown("Jump"))

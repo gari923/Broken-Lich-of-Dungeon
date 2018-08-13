@@ -33,6 +33,9 @@ public class User_Manager : MonoBehaviour
     public static string weapon_slot;// 장비 슬롯
     //장착한 장비의 데미지
     public static float weapon_Damage;
+
+    //유저가 생존했는지 확인하는 변수
+    public static bool alive = true;
     #endregion
 
     public GameObject damagedFX;
@@ -57,6 +60,7 @@ public class User_Manager : MonoBehaviour
         //스텟 초기화
         power = 5;
         health = 5;
+        weapon_slot = null;
         //스텟공식
         attack = power * 2 + weapon_Damage;
         max_hp = health * 20;
@@ -70,7 +74,11 @@ public class User_Manager : MonoBehaviour
     #region 업데이트 함수
     void Update()
     {
+        //플레이어의 스테이터스
+        if(Player.instance.status == true)
+        {
 
+        }
     }
     #endregion
 
@@ -79,11 +87,12 @@ public class User_Manager : MonoBehaviour
         //print(hp);
         //print(tempColor.a);
 
-
-        tempColor = hpFX.color;
-        tempColor.a = 1 - hp / max_hp;
-        hpFX.color = tempColor;
-
+        if (hp >= max_hp/20)
+        {
+            tempColor = hpFX.color;
+            tempColor.a = 1 - hp / max_hp;
+            hpFX.color = tempColor;
+        }
         StartCoroutine("DamageProcess");
     }
 
