@@ -336,7 +336,8 @@ public class Enemy : MonoBehaviour
             if (attack_range >= mag)
             {
                 curTime = 0;// 경과 시간 초기화
-                // 플레이어 피깎
+                            // 플레이어 피깎
+
                 User_Manager.hp -= enemy_damage;
                 User_Manager.instance.Damaged();
                 anim.SetTrigger("Attack");
