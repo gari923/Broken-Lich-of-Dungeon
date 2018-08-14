@@ -6,9 +6,10 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     public Player playerScript;
-
-    Vector3 originSize;
     public GameObject pauseUI;
+
+    pState curState;
+    Vector3 originSize;
     float curTime;
     bool paused = false;
 
@@ -21,11 +22,45 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        Ray ray = new Ray(Camera.main.transform.position,
+            Camera.main.transform.forward);
+        RaycastHit hitInfo;
+
+        if (paused)
+        {
+            pauseUI.SetActive(true);
+            Time.timeScale = 0F;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                print("종료한다");
+                Exit();
+            }
+            else if (Input.anyKeyDown)
+            {
+                Resume();
+            }
+        }
+        else
+        {
+            pauseUI.SetActive(false);
+            Time.timeScale = 1F;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Ray ray = new Ray(Camera.main.transform.position,
-            Camera.main.transform.forward);
-            RaycastHit hitInfo;
+            if (paused)
+            {
+                print("paused2play");
+                Player.instance.ps = curState;
+            }
+            else
+            {
+                print("play2paused");
+                Player.instance.ps = pState.Idle;
+                pState curState = Player.instance.ps;
+            }
+
             Vector3 pos;
             if (Physics.Raycast(ray, out hitInfo, 100))
             {
@@ -45,40 +80,6 @@ public class PauseMenu : MonoBehaviour
             }
             paused = !paused;
         }
-
-        if (paused)
-        {
-            pauseUI.SetActive(true);
-            Time.timeScale = 0F;
-
-            if (playerScript.rayObject == pauseUI.transform.GetChild(0))
-            {
-                print("resume");
-                curTime += Time.deltaTime;
-                if (curTime >= 2)
-                {
-                    Resume();
-                }
-            }
-            else if (playerScript.rayObject == pauseUI.transform.GetChild(1))
-            {
-                print("exit");
-                curTime += Time.deltaTime;
-                if (curTime >= 2)
-                {
-                    Exit();
-                }
-            }
-            else
-            {
-                curTime = 0;
-            }
-        }
-        else
-        {
-            pauseUI.SetActive(false);
-            Time.timeScale = 1F;
-        }
     }
 
     public void Resume()
@@ -88,6 +89,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Exit()
     {
+        print("앱 종료");
         Application.Quit();
     }
 }

@@ -197,6 +197,10 @@ public class Player : MonoBehaviour
                     {
                         hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
                     }
+                    if(hitInfo.transform.name == "SampleBossPhase1")
+                    {
+                    hitInfo.transform.SendMessage("DamageOrNot");
+                    }
                 }
             }
         }

@@ -259,6 +259,7 @@ public class SampleBoss : MonoBehaviour
             explosion.gameObject.SetActive(true);
             explosion.position = targetpoint + new Vector3(0, 0.5F, 0);
 
+            print(explosionCollider);
             if (explosionCollider.colliderCheck)
             {
                 print("yes");
