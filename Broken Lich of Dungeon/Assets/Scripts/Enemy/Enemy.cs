@@ -451,8 +451,7 @@ public class Enemy : MonoBehaviour
     {
         agent.enabled = false;
         curTime = 0;
-
-        User_Manager.gold += enemy_drop_gold;
+       
         StartCoroutine("DeadProcess");
     }
 
@@ -462,7 +461,7 @@ public class Enemy : MonoBehaviour
     IEnumerator DeadProcess()
     {
         yield return new WaitForSeconds(deadTime);
-
+        User_Manager.gold += enemy_drop_gold;
         Destroy(gameObject);
 
     }

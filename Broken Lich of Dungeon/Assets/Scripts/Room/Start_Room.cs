@@ -30,6 +30,11 @@ public class Start_Room : MonoBehaviour
 
     void Update()
     {
+        Player.instance.anim.SetTrigger("IdleMode");
+        GameManager.instance.rock = true;//방의 클리어 조건을 완료시킨다
+
+        Player.instance.ps = pState.Idle;
+
         //방의 기믹들을 작동시키고 싶다
         //만약 버튼이 클릭되었고 레이가 door에 닿았다면
         if (Player.instance.buttonClicked)
@@ -49,7 +54,8 @@ public class Start_Room : MonoBehaviour
         if (GameManager.instance.rock == true && door_Action_Check == true)
         {
             GameManager.instance.move = true;
-            start_Room.SetActive(false);
+            door_Action_Check = false;
+            //start_Room.SetActive(false);
         }
     }
     

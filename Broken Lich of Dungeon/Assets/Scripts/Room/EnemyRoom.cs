@@ -55,6 +55,8 @@ public class EnemyRoom : MonoBehaviour
 
     void Update()
     {
+        Player.instance.ps = pState.Attack;
+
         if (getStart == false)
         {
             curTime += Time.deltaTime;
@@ -74,6 +76,7 @@ public class EnemyRoom : MonoBehaviour
         }
         else
         {
+            enemy_Remove_Check = false;
             Player.instance.ps = pState.Attack;
             for (int i = 0; i < spawnPool.Count; i++)
             {
@@ -87,10 +90,11 @@ public class EnemyRoom : MonoBehaviour
 
         if (enemy_Remove_Check == true)
         {
-            GameManager.instance.rock = true;
-            GameManager.instance.move = true;
-            //start_Room.SetActive(false);
-            gameObject.SetActive(false);
+            //GameManager.instance.rock = true;
+            //GameManager.instance.move = true;
+            
+            GameManager.instance.clear = true;
+            //gameObject.SetActive(false);
         }
 
     }

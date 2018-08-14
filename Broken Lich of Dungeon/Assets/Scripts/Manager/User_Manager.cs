@@ -67,6 +67,8 @@ public class User_Manager : MonoBehaviour
 
         hp = max_hp;//hp를 최대치로 초기화
 
+        alive = true;
+
         tempColor = new Color();
     }
     #endregion
@@ -79,6 +81,25 @@ public class User_Manager : MonoBehaviour
         {
 
         }
+
+        if (hp >= max_hp / 20)
+        {
+            tempColor = hpFX.color;
+            tempColor.a = 1 - hp / max_hp;
+            hpFX.color = tempColor;
+        }
+
+        if (hp <= 0)
+        {
+            alive = false;
+        }
+
+        if(hp > max_hp)
+        {
+            tempColor = hpFX.color;
+            tempColor.a = 255;
+            hpFX.color = tempColor;
+        }
     }
     #endregion
 
@@ -87,12 +108,6 @@ public class User_Manager : MonoBehaviour
         //print(hp);
         //print(tempColor.a);
 
-        if (hp >= max_hp/20)
-        {
-            tempColor = hpFX.color;
-            tempColor.a = 1 - hp / max_hp;
-            hpFX.color = tempColor;
-        }
         StartCoroutine("DamageProcess");
     }
 
