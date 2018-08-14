@@ -98,10 +98,18 @@ public class GameManager : MonoBehaviour
             {
                 // 라스트룸으로
 
+<<<<<<< HEAD
                 return;
             }
 
             int random = Random.Range(0, 5);// 방을 선택할 랜덤 변수
+=======
+        // Rock 이 True이고 플레이어가 상호작용키를 눌렀을 경우 방을 랜덤으로 이동
+        if (rock == true && move == true)
+        {
+
+            int random = Random.Range(0, 7);// 방을 선택할 랜덤 변수
+>>>>>>> origin/yudahee
 
             // 랜덤 변수에 해당하는 방의 좌표로 이동
             switch (random)
@@ -182,6 +190,7 @@ public class GameManager : MonoBehaviour
             knife_Check = true;
             projectile_Check = true;
             door_Check = true;
+<<<<<<< HEAD
             User_Manager.hp = float.MaxValue; //유저의 피를 최대치로 채운다
             alivehp = true;
             StartCoroutine(PlayerMove(start_Room_StartPoint, currentRoom));
@@ -192,6 +201,12 @@ public class GameManager : MonoBehaviour
             //User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
             //player.transform.position
             //                = start_Room_StartPoint.transform.position;// 플레이어를 처음있던 방의 좌표로 이동
+=======
+            User_Manager.alive = true;
+            User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
+            player.transform.position
+                            = start_Room_StartPoint.transform.position;// 플레이어를 처음있던 방의 좌표로 이동
+>>>>>>> origin/yudahee
         }
 
         // 방을 클리어했을경우
@@ -237,6 +252,7 @@ public class GameManager : MonoBehaviour
             alivehp = false;
             User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
         }
+<<<<<<< HEAD
 
         clear = false;
 
@@ -261,6 +277,9 @@ public class GameManager : MonoBehaviour
         curTime = 0;
 
         endPlayerMove = true;
+=======
+   
+>>>>>>> origin/yudahee
     }
 
     #endregion

@@ -252,7 +252,8 @@ public class Shop_Manager : MonoBehaviour
                         if (User_Manager.gold >= buy_gold)
                         {
                             User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
-                            User_Manager.weapon_slot = item_name;
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            User_Manager.right_weapon_slot = item_name;
                             User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
                             User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
                         }
@@ -274,6 +275,7 @@ public class Shop_Manager : MonoBehaviour
                         if (User_Manager.gold >= buy_gold)
                         {
                             User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
 
                             //현재 hp와 회복량을 더한값이 max_hp값을 넘어간다면
                             if (User_Manager.hp + amount > User_Manager.max_hp)
@@ -296,6 +298,7 @@ public class Shop_Manager : MonoBehaviour
                         if (User_Manager.gold >= buy_gold)
                         {
                             User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
 
                             //현재 hp와 회복량을 더한값이 max_hp값을 넘어간다면
                             if (User_Manager.hp + amount > User_Manager.max_hp)
@@ -318,6 +321,7 @@ public class Shop_Manager : MonoBehaviour
                         if (User_Manager.gold >= buy_gold)
                         {
                             User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
 
                             //현재 hp와 회복량을 더한값이 max_hp값을 넘어간다면
                             if (User_Manager.hp + amount > User_Manager.max_hp)
@@ -345,6 +349,7 @@ public class Shop_Manager : MonoBehaviour
                             if (User_Manager.gold >= buy_gold)
                             {
                                 User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                                gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
                                 User_Manager.LV += 1; //유저의 LV을 올린다
                                 switch (state_type)
                                 {
@@ -367,6 +372,7 @@ public class Shop_Manager : MonoBehaviour
                             if (User_Manager.gold >= buy_gold)
                             {
                                 User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                                gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
                                 User_Manager.LV += 1; //유저의 LV을 올린다
                                 switch (state_type)
                                 {
