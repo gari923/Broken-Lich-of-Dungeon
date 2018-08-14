@@ -7,6 +7,11 @@ public class ColliderCheck : MonoBehaviour
     public Collider playerCollider;
     public bool colliderCheck = false;
 
+    void Start()
+    {
+        playerCollider = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other == playerCollider)
