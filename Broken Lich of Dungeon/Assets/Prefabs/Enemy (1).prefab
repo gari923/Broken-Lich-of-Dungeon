@@ -1877,7 +1877,7 @@ MonoBehaviour:
   destinationRange: 1
   warningRange: 20
   deadTime: 3
-  enemy_damage: 3
+  enemy_damage: 0
   enemy_hp: 0
   enemy_max_hp: 20
   enemy_drop_gold: 100

@@ -30,12 +30,21 @@ public class User_Manager : MonoBehaviour
     public static float health;// 헬스
 
     //유저의 장비
-    public static string weapon_slot;// 장비 슬롯
+    public static string right_weapon_slot;// 장비 슬롯
     //장착한 장비의 데미지
     public static float weapon_Damage;
 
     //유저가 생존했는지 확인하는 변수
     public static bool alive = true;
+
+    public GameObject UI;
+    public Text text_lv;
+    public Text text_gold;
+    public Text text_hp;
+    public Text text_power;
+    public Text text_health;
+    public Text text_right_weapon;
+    public Text text_attackPoint;
     #endregion
 
     public GameObject damagedFX;
@@ -60,7 +69,7 @@ public class User_Manager : MonoBehaviour
         //스텟 초기화
         power = 5;
         health = 5;
-        weapon_slot = null;
+        right_weapon_slot = "스틸 대거";
         //스텟공식
         attack = power * 2 + weapon_Damage;
         max_hp = health * 20;
@@ -75,9 +84,24 @@ public class User_Manager : MonoBehaviour
     void Update()
     {
         //플레이어의 스테이터스
-        if(Player.instance.status == true)
+        if (Player.instance.status == true && Shop_Manager.instance.shop_state == false)
         {
-
+            text_lv.text = "LV " + LV;
+            text_gold.text = "GOLD : " + gold;
+            text_hp.text = "hp : " + hp + " / " + max_hp;
+            text_power.text = "힘 : " + power;
+            text_health.text = "체력 : " + health;
+            text_right_weapon.text = "오른손 장비 : " + right_weapon_slot;
+            text_attackPoint.text = "공격력 : " + attack;
+            UI.SetActive(true);
+        }
+        else if (Player.instance.status == false)
+        {
+            UI.SetActive(false);
+        }
+        if (hp<0)
+        {
+            alive = false;
         }
     }
     #endregion

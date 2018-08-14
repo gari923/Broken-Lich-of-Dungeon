@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
         // Rock 이 True이고 플레이어가 상호작용키를 눌렀을 경우 방을 랜덤으로 이동
         if (rock == true && move == true)
         {
+
             int random = Random.Range(0, 7);// 방을 선택할 랜덤 변수
 
             // 랜덤 변수에 해당하는 방의 좌표로 이동
@@ -178,6 +179,7 @@ public class GameManager : MonoBehaviour
             knife_Check = true;
             projectile_Check = true;
             door_Check = true;
+            User_Manager.alive = true;
             User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
             player.transform.position
                             = start_Room_StartPoint.transform.position;// 플레이어를 처음있던 방의 좌표로 이동
@@ -189,6 +191,7 @@ public class GameManager : MonoBehaviour
             player.transform.position
                             = start_Room_StartPoint.transform.position;// 플레이어를 처음있던 방의 좌표로 이동
         }
+   
     }
     #endregion
 }

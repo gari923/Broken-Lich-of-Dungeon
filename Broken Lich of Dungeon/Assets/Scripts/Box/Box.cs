@@ -64,7 +64,7 @@ public class Box : MonoBehaviour
             Player.instance.rayObject == this)
         {
             isOpened = true;
-            User_Manager.weapon_slot = "fist";
+            User_Manager.right_weapon_slot = "fist";
         }
     }
 
