@@ -144,6 +144,7 @@ public class Player : MonoBehaviour
         // Fire1키로 공격/상호작용
         if (Input.GetButtonDown("Fire1"))
         {
+            status = false;
             buttonClicked = true;// 버튼을 다운을 했을 때 true
             if (Physics.SphereCast(ray, rayRadius, out hitInfo, idleRange))
             {

@@ -51,6 +51,8 @@ public class Shop_Manager : MonoBehaviour
     //상점창이 열려있는지 확인하는 변수
     public bool shop_state = false;
 
+    float cheat_num = 0;
+
     #region 어웨이크
     private void Awake()
     {
@@ -316,7 +318,7 @@ public class Shop_Manager : MonoBehaviour
                         }
                     }
                     //3번째 리스트 버튼을 눌렀을때
-                    if (Player.instance.rayObject.name == "btn_List3" && Player.instance.buttonClicked == true)
+                    else if (Player.instance.rayObject.name == "btn_List3" && Player.instance.buttonClicked == true)
                     {
                         list_num = 3;
                         OnBtn_Expendables_List();
@@ -340,61 +342,77 @@ public class Shop_Manager : MonoBehaviour
                     }
                     break;
                 case "스텟":
+                    //1번째 리스트 버튼을 눌렀을때
                     if (Player.instance.rayObject.name == "btn_List1" && Player.instance.buttonClicked == true)
                     {
-                        //1번째 리스트 버튼을 눌렀을때
-                        if (Player.instance.rayObject.name == "btn_List1" && Player.instance.buttonClicked == true)
-                        {
-                            list_num = 1;
-                            OnBtn_State_List();
+                        list_num = 1;
+                        OnBtn_State_List();
 
-                            //유저가 가진 돈이 아이템의 가격보다 많다면
-                            if (User_Manager.gold >= buy_gold)
+                        //유저가 가진 돈이 아이템의 가격보다 많다면
+                        if (User_Manager.gold >= buy_gold)
+                        {
+                            print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            User_Manager.LV += 1; //유저의 LV을 올린다
+                            switch (state_type)
                             {
-                                print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
-                                User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
-                                gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
-                                User_Manager.LV += 1; //유저의 LV을 올린다
-                                switch (state_type)
-                                {
-                                    case "힘":
-                                        User_Manager.power += 1;
-                                        break;
-                                    case "체력":
-                                        User_Manager.health += 1;
-                                        break;
-                                }
+                                case "힘":
+                                    User_Manager.power += 1;
+                                    User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage;
+                                    break;
+                                case "체력":
+                                    User_Manager.health += 1;
+                                    User_Manager.max_hp = User_Manager.health * 20;
+                                    User_Manager.hp += 20;
+                                    break;
+                            }
+                            for (int i = 1; i < 4; i++)
+                            {
+                                list_num = i;
+                                OnBtn_State_List();//스텟 리스트를 띄운다
                             }
                         }
-                        //2번째 리스트 버튼을 눌렀을때
-                        if (Player.instance.rayObject.name == "btn_List2" && Player.instance.buttonClicked == true)
-                        {
-                            list_num = 2;
-                            OnBtn_State_List();
+                    }
+                    //2번째 리스트 버튼을 눌렀을때
+                    else if (Player.instance.rayObject.name == "btn_List2" && Player.instance.buttonClicked == true)
+                    {
+                        list_num = 2;
+                        OnBtn_State_List();
 
-                            //유저가 가진 돈이 아이템의 가격보다 많다면
-                            if (User_Manager.gold >= buy_gold)
+                        //유저가 가진 돈이 아이템의 가격보다 많다면
+                        if (User_Manager.gold >= buy_gold)
+                        {
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            User_Manager.LV += 1; //유저의 LV을 올린다
+                            switch (state_type)
                             {
-                                User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
-                                gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
-                                User_Manager.LV += 1; //유저의 LV을 올린다
-                                switch (state_type)
-                                {
-                                    case "힘":
-                                        User_Manager.power += 1;
-                                        break;
-                                    case "체력":
-                                        User_Manager.health += 1;
-                                        break;
-                                }
+                                case "힘":
+                                    User_Manager.power += 1;
+                                    User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage;
+                                    break;
+                                case "체력":
+                                    User_Manager.health += 1;
+                                    User_Manager.max_hp = User_Manager.health * 20;
+                                    User_Manager.hp += 20;
+                                    break;
+                            }
+                            for (int i = 1; i < 4; i++)
+                            {
+                                list_num = i;
+                                OnBtn_State_List();//스텟 리스트를 띄운다
                             }
                         }
-
                     }
                     break;
             }
         }
+
+
+
     }
+
 
     //무기 목록 버튼을 눌렀을때 실행할 메소드
     void OnBtn_Weapon_List()
