@@ -10,14 +10,13 @@ public class PauseMenu : MonoBehaviour
 
     pState curState;
     Vector3 originSize;
-    float curTime;
+    
     bool paused = false;
 
     void Start()
     {
         originSize = pauseUI.transform.localScale;
-        pauseUI.SetActive(false);
-        curTime = 0;
+        pauseUI.SetActive(false);        
     }
 
     void Update()
