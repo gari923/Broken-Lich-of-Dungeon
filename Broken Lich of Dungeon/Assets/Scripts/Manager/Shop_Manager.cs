@@ -251,7 +251,10 @@ public class Shop_Manager : MonoBehaviour
                         //유저가 가진 돈이 아이템의 가격보다 많다면
                         if (User_Manager.gold >= buy_gold)
                         {
-                            User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+
+                            print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
+
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
                             User_Manager.right_weapon_slot = item_name;
                             User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
@@ -274,7 +277,7 @@ public class Shop_Manager : MonoBehaviour
                         //유저가 가진 돈이 아이템의 가격보다 많다면
                         if (User_Manager.gold >= buy_gold)
                         {
-                            User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
 
                             //현재 hp와 회복량을 더한값이 max_hp값을 넘어간다면
@@ -297,7 +300,7 @@ public class Shop_Manager : MonoBehaviour
                         //유저가 가진 돈이 아이템의 가격보다 많다면
                         if (User_Manager.gold >= buy_gold)
                         {
-                            User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
 
                             //현재 hp와 회복량을 더한값이 max_hp값을 넘어간다면
@@ -320,7 +323,7 @@ public class Shop_Manager : MonoBehaviour
                         //유저가 가진 돈이 아이템의 가격보다 많다면
                         if (User_Manager.gold >= buy_gold)
                         {
-                            User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
 
                             //현재 hp와 회복량을 더한값이 max_hp값을 넘어간다면
@@ -348,7 +351,8 @@ public class Shop_Manager : MonoBehaviour
                             //유저가 가진 돈이 아이템의 가격보다 많다면
                             if (User_Manager.gold >= buy_gold)
                             {
-                                User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                                print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
+                                User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                                 gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
                                 User_Manager.LV += 1; //유저의 LV을 올린다
                                 switch (state_type)
@@ -363,7 +367,7 @@ public class Shop_Manager : MonoBehaviour
                             }
                         }
                         //2번째 리스트 버튼을 눌렀을때
-                        if (Player.instance.rayObject.name == "btn_List1" && Player.instance.buttonClicked == true)
+                        if (Player.instance.rayObject.name == "btn_List2" && Player.instance.buttonClicked == true)
                         {
                             list_num = 2;
                             OnBtn_State_List();
@@ -371,7 +375,7 @@ public class Shop_Manager : MonoBehaviour
                             //유저가 가진 돈이 아이템의 가격보다 많다면
                             if (User_Manager.gold >= buy_gold)
                             {
-                                User_Manager.gold -= Item_Manager.buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                                User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                                 gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
                                 User_Manager.LV += 1; //유저의 LV을 올린다
                                 switch (state_type)

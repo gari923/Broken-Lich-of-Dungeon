@@ -85,6 +85,7 @@ public class User_Manager : MonoBehaviour
     #region 업데이트 함수
     void Update()
     {
+        print(gold);
         //플레이어의 스테이터스
         if (Player.instance.status == true && Shop_Manager.instance.shop_state == false)
         {
