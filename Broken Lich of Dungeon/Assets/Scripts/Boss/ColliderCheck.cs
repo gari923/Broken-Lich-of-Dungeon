@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ColliderCheck : MonoBehaviour
 {
-    public Collider playerCollider;
+    Collider playerCollider;
     public bool colliderCheck = false;
 
     void Start()
