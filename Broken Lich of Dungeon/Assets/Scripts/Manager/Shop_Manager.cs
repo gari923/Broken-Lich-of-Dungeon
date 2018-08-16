@@ -51,6 +51,8 @@ public class Shop_Manager : MonoBehaviour
     //상점창이 열려있는지 확인하는 변수
     public bool shop_state = false;
 
+    float cheat_num = 0;
+
     #region 어웨이크
     private void Awake()
     {
@@ -251,21 +253,96 @@ public class Shop_Manager : MonoBehaviour
                         //유저가 가진 돈이 아이템의 가격보다 많다면
                         if (User_Manager.gold >= buy_gold)
                         {
-
-                            print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
-
                             User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
-                            User_Manager.right_weapon_slot = item_name;
-                            User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
-                            User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
+                            switch (weapon_type)
+                            {
+                                case "무기":
+                                    User_Manager.right_weapon_slot = item_name;
+                                    User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
+                                    User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
+                                    break;
+                                case "방패":
+                                    User_Manager.left_weapon_slot = item_name;
+                                    User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
+                                    User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
+                                    if (User_Manager.hp + amount > User_Manager.max_hp)
+                                    {
+                                        User_Manager.hp = User_Manager.max_hp;
+                                    }
+                                    else if (User_Manager.hp + amount <= User_Manager.max_hp)
+                                    {
+                                        User_Manager.hp += amount;
+                                    }
+                                    break;
+                            }
                         }
                     }
+
                     //2번째 리스트 버튼을 눌렀을때
                     else if (Player.instance.rayObject.name == "btn_List2" && Player.instance.buttonClicked == true)
                     {
                         list_num = 2;
                         OnBtn_Weapon_List();
+                        //유저가 가진 돈이 아이템의 가격보다 많다면
+                        if (User_Manager.gold >= buy_gold)
+                        {
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            switch (weapon_type)
+                            {
+                                case "무기":
+                                    User_Manager.right_weapon_slot = item_name;
+                                    User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
+                                    User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
+                                    break;
+                                case "방패":
+                                    User_Manager.left_weapon_slot = item_name;
+                                    User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
+                                    User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
+                                    if (User_Manager.hp + amount > User_Manager.max_hp)
+                                    {
+                                        User_Manager.hp = User_Manager.max_hp;
+                                    }
+                                    else if (User_Manager.hp + amount <= User_Manager.max_hp)
+                                    {
+                                        User_Manager.hp += amount;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    else if (Player.instance.rayObject.name == "btn_List3" && Player.instance.buttonClicked == true)
+                    {
+                        list_num = 3;
+                        OnBtn_Weapon_List();
+                        //유저가 가진 돈이 아이템의 가격보다 많다면
+                        if (User_Manager.gold >= buy_gold)
+                        {
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            switch (weapon_type)
+                            {
+                                case "무기":
+                                    User_Manager.right_weapon_slot = item_name;
+                                    User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
+                                    User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
+                                    break;
+                                case "방패":
+                                    User_Manager.left_weapon_slot = item_name;
+                                    User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
+                                    User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
+                                    if (User_Manager.hp + amount > User_Manager.max_hp)
+                                    {
+                                        User_Manager.hp = User_Manager.max_hp;
+                                    }
+                                    else if (User_Manager.hp + amount <= User_Manager.max_hp)
+                                    {
+                                        User_Manager.hp += amount;
+                                    }
+                                    break;
+                            }
+                        }
                     }
                     break;
                 case "소모품":
@@ -316,7 +393,7 @@ public class Shop_Manager : MonoBehaviour
                         }
                     }
                     //3번째 리스트 버튼을 눌렀을때
-                    if (Player.instance.rayObject.name == "btn_List3" && Player.instance.buttonClicked == true)
+                    else if (Player.instance.rayObject.name == "btn_List3" && Player.instance.buttonClicked == true)
                     {
                         list_num = 3;
                         OnBtn_Expendables_List();
@@ -340,61 +417,77 @@ public class Shop_Manager : MonoBehaviour
                     }
                     break;
                 case "스텟":
+                    //1번째 리스트 버튼을 눌렀을때
                     if (Player.instance.rayObject.name == "btn_List1" && Player.instance.buttonClicked == true)
                     {
-                        //1번째 리스트 버튼을 눌렀을때
-                        if (Player.instance.rayObject.name == "btn_List1" && Player.instance.buttonClicked == true)
-                        {
-                            list_num = 1;
-                            OnBtn_State_List();
+                        list_num = 1;
+                        OnBtn_State_List();
 
-                            //유저가 가진 돈이 아이템의 가격보다 많다면
-                            if (User_Manager.gold >= buy_gold)
+                        //유저가 가진 돈이 아이템의 가격보다 많다면
+                        if (User_Manager.gold >= buy_gold)
+                        {
+                            print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            User_Manager.LV += 1; //유저의 LV을 올린다
+                            switch (state_type)
                             {
-                                print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
-                                User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
-                                gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
-                                User_Manager.LV += 1; //유저의 LV을 올린다
-                                switch (state_type)
-                                {
-                                    case "힘":
-                                        User_Manager.power += 1;
-                                        break;
-                                    case "체력":
-                                        User_Manager.health += 1;
-                                        break;
-                                }
+                                case "힘":
+                                    User_Manager.power += 1;
+                                    User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage;
+                                    break;
+                                case "체력":
+                                    User_Manager.health += 1;
+                                    User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health;
+                                    User_Manager.hp += 20;
+                                    break;
+                            }
+                            for (int i = 1; i < 4; i++)
+                            {
+                                list_num = i;
+                                OnBtn_State_List();//스텟 리스트를 띄운다
                             }
                         }
-                        //2번째 리스트 버튼을 눌렀을때
-                        if (Player.instance.rayObject.name == "btn_List2" && Player.instance.buttonClicked == true)
-                        {
-                            list_num = 2;
-                            OnBtn_State_List();
+                    }
+                    //2번째 리스트 버튼을 눌렀을때
+                    else if (Player.instance.rayObject.name == "btn_List2" && Player.instance.buttonClicked == true)
+                    {
+                        list_num = 2;
+                        OnBtn_State_List();
 
-                            //유저가 가진 돈이 아이템의 가격보다 많다면
-                            if (User_Manager.gold >= buy_gold)
+                        //유저가 가진 돈이 아이템의 가격보다 많다면
+                        if (User_Manager.gold >= buy_gold)
+                        {
+                            User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
+                            gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            User_Manager.LV += 1; //유저의 LV을 올린다
+                            switch (state_type)
                             {
-                                User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
-                                gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
-                                User_Manager.LV += 1; //유저의 LV을 올린다
-                                switch (state_type)
-                                {
-                                    case "힘":
-                                        User_Manager.power += 1;
-                                        break;
-                                    case "체력":
-                                        User_Manager.health += 1;
-                                        break;
-                                }
+                                case "힘":
+                                    User_Manager.power += 1;
+                                    User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage;
+                                    break;
+                                case "체력":
+                                    User_Manager.health += 1;
+                                    User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health;
+                                    User_Manager.hp += 20;
+                                    break;
+                            }
+                            for (int i = 1; i < 4; i++)
+                            {
+                                list_num = i;
+                                OnBtn_State_List();//스텟 리스트를 띄운다
                             }
                         }
-
                     }
                     break;
             }
         }
+
+
+
     }
+
 
     //무기 목록 버튼을 눌렀을때 실행할 메소드
     void OnBtn_Weapon_List()
@@ -406,16 +499,129 @@ public class Shop_Manager : MonoBehaviour
                 switch (list_num)//리스트 번호에 따른 리스트를 보여준다
                 {
                     case 1:
-                        item_name = "부숴진검";
+                        item_name = "롱소드";
                         buy_gold = 1000;
                         amount = 3;
-                        list1.text = item_name + " / 공격력 + " + amount + " / " + buy_gold + " Gold";
+                        weapon_type = "무기";
+                        list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 2:
-                        list2.text = "";
+                        item_name = "카타나";
+                        buy_gold = 1900;
+                        amount = 5;
+                        weapon_type = "무기";
+                        list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 3:
-                        list3.text = "";
+                        item_name = "헨드엑스";
+                        buy_gold = 3000;
+                        amount = 8;
+                        weapon_type = "무기";
+                        list3.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                }
+                break;
+            case 2:
+                switch (list_num)//리스트 번호에 따른 리스트를 보여준다
+                {
+                    case 1:
+                        item_name = "팔시온";
+                        buy_gold = 4500;
+                        amount = 12;
+                        weapon_type = "무기";
+                        list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 2:
+                        item_name = "브로드소드";
+                        buy_gold = 6000;
+                        amount = 15;
+                        weapon_type = "무기";
+                        list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 3:
+                        item_name = "사이즈";
+                        buy_gold = 7500;
+                        amount = 19;
+                        weapon_type = "무기";
+                        list3.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                }
+                break;
+            case 3:
+                switch (list_num)//리스트 번호에 따른 리스트를 보여준다
+                {
+                    case 1:
+                        item_name = "클레이모어";
+                        buy_gold = 10000;
+                        amount = 23;
+                        weapon_type = "무기";
+                        list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 2:
+                        item_name = "그레이트엑스";
+                        buy_gold = 11500;
+                        amount = 25;
+                        weapon_type = "무기";
+                        list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 3:
+                        item_name = "플람베르쥬";
+                        buy_gold = 13000;
+                        amount = 28;
+                        weapon_type = "무기";
+                        list3.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                }
+                break;
+            case 4:
+                switch (list_num)//리스트 번호에 따른 리스트를 보여준다
+                {
+                    case 1:
+                        item_name = "배틀액스";
+                        buy_gold = 15000;
+                        amount = 32;
+                        weapon_type = "무기";
+                        list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 2:
+                        item_name = "투헨드소드";
+                        buy_gold = 18000;
+                        amount = 36;
+                        weapon_type = "무기";
+                        list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 3:
+                        item_name = "그람";
+                        buy_gold = 22000;
+                        amount = 40;
+                        weapon_type = "무기";
+                        list3.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                }
+                break;
+            case 5:
+                switch (list_num)//리스트 번호에 따른 리스트를 보여준다
+                {
+                    case 1:
+                        item_name = "히터쉴드";
+                        buy_gold = 8000;
+                        amount = 100;
+                        weapon_type = "방패";
+                        list1.text = item_name + " / " + weapon_type + " / Max Hp + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 2:
+                        item_name = "스파이크쉴드";
+                        buy_gold = 19500;
+                        amount = 200;
+                        weapon_type = "방패";
+                        list2.text = item_name + " / " + weapon_type + " / Max Hp + " + amount + "\n/ " + buy_gold + " Gold";
+                        break;
+                    case 3:
+                        item_name = "타워쉴드";
+                        buy_gold = 30000;
+                        amount = 300;
+                        weapon_type = "방패";
+                        list3.text = item_name + " / " + weapon_type + " / Max Hp + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                 }
                 break;

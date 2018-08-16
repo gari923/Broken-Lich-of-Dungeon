@@ -1811,7 +1811,11 @@ MonoBehaviour:
   destinationRange: 1
   warningRange: 20
   deadTime: 3
+<<<<<<< HEAD
   enemy_damage: 10
+=======
+  enemy_damage: 5
+>>>>>>> origin/yudahee
   enemy_hp: 0
   enemy_max_hp: 40
   enemy_drop_gold: 100000

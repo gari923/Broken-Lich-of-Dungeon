@@ -1700,7 +1700,39 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+<<<<<<< HEAD
 --- !u!114 &114282868161875452
+=======
+--- !u!114 &114296984562195554
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1865459363057960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d6772bc306fda418531803f759fb0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveRange: 50
+  viewAngle: 120
+  pathRange: 1
+  idleDelay: 1
+  attackDelay: 0.7
+  stopDelay: 3
+  destinationRange: 1
+  warningRange: 20
+  deadTime: 3
+  enemy_damage: 3
+  enemy_hp: 0
+  enemy_max_hp: 20
+  enemy_drop_gold: 100
+  attack_range: 1.8
+  es: 0
+  HP_Can: {fileID: 223771431148711076}
+  HP_Bar: {fileID: 114448302808458730}
+--- !u!114 &114344145847577538
+>>>>>>> origin/yudahee
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
