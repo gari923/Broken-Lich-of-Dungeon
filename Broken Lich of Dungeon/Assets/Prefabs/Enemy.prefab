@@ -977,7 +977,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1787867703726582}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.47, y: 0, z: 0}
+  m_LocalPosition: {x: -5.97, y: 0, z: 3.82}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4710111529111142}
@@ -1806,12 +1806,12 @@ MonoBehaviour:
   viewAngle: 120
   pathRange: 1
   idleDelay: 1
-  attackDelay: 1.3
+  attackDelay: 1.5
   stopDelay: 3
   destinationRange: 1
   warningRange: 20
   deadTime: 3
-  enemy_damage: 0
+  enemy_damage: 10
   enemy_hp: 0
   enemy_max_hp: 40
   enemy_drop_gold: 100000
@@ -1966,7 +1966,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 5
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

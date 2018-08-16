@@ -128,7 +128,9 @@ public class Player : MonoBehaviour
 
     void Idle()
     {
-
+        anim.ResetTrigger("Attack");
+        anim.ResetTrigger("AttackSlash");
+        anim.SetTrigger("Idle");
         gvrRectPointer.SetActive(true);
         coolTimeCanvas.SetActive(false);
 
@@ -136,10 +138,8 @@ public class Player : MonoBehaviour
         {
             anim.SetTrigger("IdleMove");
         }
-        else
-        {
-            anim.SetTrigger("Idle");
-        }
+
+
 
         // Fire1키로 공격/상호작용
         if (Input.GetButtonDown("Fire1"))
@@ -176,6 +176,8 @@ public class Player : MonoBehaviour
 
     void Attack()
     {
+        anim.ResetTrigger("Idle");
+        anim.ResetTrigger("IdleMove");
         anim.SetTrigger("Attack");
 
         gvrRectPointer.SetActive(false);
@@ -197,9 +199,9 @@ public class Player : MonoBehaviour
                     {
                         hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
                     }
-                    if(hitInfo.transform.name == "SampleBossPhase1")
+                    if (hitInfo.transform.name == "SampleBossPhase1")
                     {
-                    hitInfo.transform.SendMessage("DamageOrNot");
+                        hitInfo.transform.SendMessage("DamageOrNot");
                     }
                 }
             }

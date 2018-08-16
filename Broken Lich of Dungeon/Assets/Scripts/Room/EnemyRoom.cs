@@ -60,7 +60,6 @@ public class EnemyRoom : MonoBehaviour
         if (getStart == false)
         {
             curTime += Time.deltaTime;
-            Player.instance.anim.SetTrigger("AttackMode");
             if (curTime >= startTime)
             {
                 curTime = 0;
@@ -71,7 +70,6 @@ public class EnemyRoom : MonoBehaviour
         if (spawnPool.Count == 0 && getStart == true && GameObject.Find("SampleBossPhase1") == null)
         {
             enemy_Remove_Check = true;
-            Player.instance.anim.SetTrigger("IdleMode");
             Player.instance.ps = pState.Idle;
         }
         else

@@ -53,9 +53,9 @@ public class GameManager : MonoBehaviour
 
     public GameObject fadeObj;
     public float fadeTime = 1f;
+    public float curTime;
     Image fadeImg;
     Color fadeColor;
-    float curTime;
 
     bool endPlayerMove = true;
 
@@ -85,7 +85,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // 모든 방이 비활성화일 경우 마지막방을 활성화
-        
+
 
         // Rock 이 True이고 플레이어가 상호작용키를 눌렀을 경우 방을 랜덤으로 이동
         if (rock == true && move == true)
@@ -186,7 +186,8 @@ public class GameManager : MonoBehaviour
             alivehp = true;
             StartCoroutine(PlayerMove(start_Room_StartPoint, currentRoom));
             User_Manager.alive = true;
-            
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
             //SceneManager.LoadScene(0);
             //User_Manager.alive = true;
             //User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
@@ -195,7 +196,7 @@ public class GameManager : MonoBehaviour
         }
 
         // 방을 클리어했을경우
-        if (User_Manager.alive == true && clear == true && endPlayerMove== true)
+        if (User_Manager.alive == true && clear == true && endPlayerMove == true)
         {
             if (start_Room.activeSelf != true)
             {
@@ -210,7 +211,7 @@ public class GameManager : MonoBehaviour
     }
 
     IEnumerator PlayerMove(Transform room, GameObject curRoom)
-    {        
+    {
         //카메라 앞 이미지 필터를 킨다
         fadeObj.SetActive(true);
 
@@ -224,6 +225,8 @@ public class GameManager : MonoBehaviour
         }
         // 정해진 시간까지 기다리고 나서 실행한다.
         yield return new WaitForSeconds(fadeTime);
+
+        // 게임오버 자리
 
         // 플레이어를 해당 방으로 이동시킨다.
         player.transform.position = room.transform.position;
@@ -261,6 +264,8 @@ public class GameManager : MonoBehaviour
         curTime = 0;
 
         endPlayerMove = true;
+
+
     }
 
     #endregion

@@ -167,7 +167,8 @@ public class Enemy : MonoBehaviour
                     // 공격 가능 거리에 도달하면 공격으로 상태로 전환
                     if (attack_range >= mag)
                     {
-                        curTime = attackDelay / 1.5f;
+                        //curTime = attackDelay / 1.5f;
+                        curTime = attackDelay;
                         agent.enabled = false;
                         es = EState.Attack;
                     }
@@ -280,24 +281,6 @@ public class Enemy : MonoBehaviour
             }
         }
 
-        //시야 안쪽
-        // 거리 안쪽
-        // 장애물 유
-        // 무
-        // 거리 바깥쪽
-        // 장애물 유
-        // 무
-
-        // 시야 바깥쪽
-        // 거리안쪽
-        // 장애물 유
-        // 무
-        // 거리 바깥쪽
-        // 장애물 유
-        // 무
-
-
-
     }
     #endregion
 
@@ -346,12 +329,10 @@ public class Enemy : MonoBehaviour
             // 플레이어에게 데미지를 준다.
             if (attack_range >= mag)
             {
-                curTime = 0;// 경과 시간 초기화
-                            // 플레이어 피깎
-
-                User_Manager.hp -= enemy_damage;
-                User_Manager.instance.Damaged();
                 anim.SetTrigger("Attack");
+                curTime = 0;// 경과 시간 초기화
+                User_Manager.hp -= enemy_damage;// 플레이어 피깎
+                User_Manager.instance.Damaged();
             }
             else
             {
@@ -395,7 +376,7 @@ public class Enemy : MonoBehaviour
 
                 }
             }
-            es = EState.Move;
+            es = EState.Attack;
             anim.SetTrigger("Move");
         }
         else
