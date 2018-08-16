@@ -7,7 +7,7 @@ using UnityEngine.AI;
 #region 보스몹의 상태
 enum BossState
 {
-    Idle, Combat, Damaged, Move, Chase, Dead, Wait
+    Idle, Combat, Damaged, Move, Chase, Dead, Wait, P2
 }
 #endregion
 
@@ -27,6 +27,7 @@ public class SampleBoss : MonoBehaviour
     public ColliderCheck explosionCollider;
     public ColliderCheck shockWaveCollider;
 
+
     public float apearRotate = 2F;// 대기상태 딜레이
     public float maxHP = 100F;// 최대 HP
     public float hP = 0F;// HP
@@ -39,8 +40,9 @@ public class SampleBoss : MonoBehaviour
     public float moveSpeed = 3F;// 움직이는 속도
     public float chaseSpeed = 6F;// 쫒아가는 속도
     public float damagedCool = 1F;// 대미지를 받고 기다리는 쿨타임
-    public float damageHP = 5F;
-    public float attackPower = 10F;
+    public float damageHP = 5F;// 피격 대미지
+    public float attackPower = 10F;// 공격력
+    public bool phase2;// phase2일 경우 체크
 
     public bool isInvincible = false;// 무적 판정
 
@@ -52,6 +54,7 @@ public class SampleBoss : MonoBehaviour
     bool isRunning;// 달리고 있는지
     bool isTwoThird;
     bool isOneThird;
+
     #endregion
 
     #region 시작 함수
@@ -74,36 +77,39 @@ public class SampleBoss : MonoBehaviour
     #region 등장
     IEnumerator Appear()
     {
-        yield return new WaitForSeconds(0.1F);
+        yield return new WaitForSeconds(2F);
         tornado.gameObject.SetActive(true);
         tornado.Play();// 토네이도
 
         // 한 바퀴 돌기
+        curTime = 0;
         while (curTime < apearRotate)
         {
             transform.Rotate(new Vector3(0, 360 * Time.deltaTime / apearRotate, 0));
             yield return new WaitForEndOfFrame();
         }
 
-        transform.eulerAngles = new Vector3(0, 180F, 0);// 방향 리셋
         tornado.Stop();
         yield return new WaitForSeconds(1.5F);
 
-        // 앞으로 다가가기/////////////////////
-        curTime = 0;
-        while (curTime < 0.4F)
+        if (!phase2)
         {
-            transform.Translate(-transform.forward * 0.2F);
-            yield return new WaitForEndOfFrame();
-        }
-        tornado.gameObject.SetActive(false);
-        ////////////////////////////////////
+            // 앞으로 다가가기/////////////////////
+            curTime = 0;
+            while (curTime < 0.4F)
+            {
+                transform.Translate(-transform.forward * 0.5F);
+                yield return new WaitForEndOfFrame();
+            }
+            tornado.gameObject.SetActive(false);
+            ////////////////////////////////////
 
-        // 내려가기
-        while (transform.position.y >= 0)
-        {
-            transform.Translate(-transform.up * 0.3F);
-            yield return new WaitForEndOfFrame();
+            // 내려가기
+            while (transform.position.y >= 0)
+            {
+                transform.Translate(-transform.up * 0.3F);
+                yield return new WaitForEndOfFrame();
+            }
         }
 
         // 초기화 작업///////////////
@@ -118,7 +124,7 @@ public class SampleBoss : MonoBehaviour
     {
         curTime += Time.deltaTime;
 
-        if (bossState == BossState.Wait && curTime >= 20F)
+        if (bossState == BossState.Wait && curTime >= 15F)
         {
             bossState = BossState.Idle;
         }
@@ -170,7 +176,7 @@ public class SampleBoss : MonoBehaviour
     #region 공격 상태
     void Combat()
     {
-        print("combat");//////
+        print("Combat");//////
         animator.SetInteger("state", 3);
         isInvincible = false;
 
@@ -181,20 +187,27 @@ public class SampleBoss : MonoBehaviour
         {
             StopCoroutine("LookPlayer");// 바라보기 중단
 
-            // 랜덤으로 3가지 패턴 실행
-            switch (UnityEngine.Random.Range(0, 3))
+            if (phase2)
             {
-                case 0:
-                    StartCoroutine("Pattern1");
-                    break;
-                case 1:
-                    StartCoroutine("Pattern2");
-                    break;
-                case 2:
-                    StartCoroutine("Pattern3");
-                    break;
-                default:
-                    break;
+                StartCoroutine("Phase2");
+            }
+            else
+            {
+                // 랜덤으로 3가지 패턴 실행
+                switch (UnityEngine.Random.Range(0, 3))
+                {
+                    case 0:
+                        StartCoroutine("Pattern1");
+                        break;
+                    case 1:
+                        StartCoroutine("Pattern2");
+                        break;
+                    case 2:
+                        StartCoroutine("Pattern3");
+                        break;
+                    default:
+                        break;
+                }
             }
             bossState = BossState.Wait;
             curTime = 0;
@@ -210,8 +223,9 @@ public class SampleBoss : MonoBehaviour
 
         // 8초간 플레이어 추적//////
         curTime = 0;
-        while (curTime <= 8F && Vector3.Distance(transform.position, player.position) > attackRange)
+        while (curTime <= 8F && Vector3.Distance(transform.position, getTargetPosition()) > attackRange)
         {
+            print("Let's Go");
             TracePlayer();
             yield return new WaitForEndOfFrame();
         }
@@ -220,12 +234,12 @@ public class SampleBoss : MonoBehaviour
         StopTrace();// 추적 중단
         StopCoroutine("LookPlayer");// 플레이어를 바라보기
 
-
+        print("okAttack");////////////////////////////////////////////////////////////////////////////////////////
         animator.SetTrigger("attack");// 공격 모션
-        yield return new WaitForSeconds(2F);
+        yield return new WaitForSeconds(1F);
         if (meleeCollider.colliderCheck)
         {
-            print("yes");
+            print("Attack!!!");
             User_Manager.hp -= attackPower;
             User_Manager.instance.Damaged();
         }
@@ -249,7 +263,7 @@ public class SampleBoss : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             animator.SetTrigger("attack");// 공격 모션
-            Vector3 targetpoint = player.position;// 플레이어 위치를 타겟으로
+            Vector3 targetpoint = getTargetPosition();// 플레이어 위치를 타겟으로
             dustSmoke.gameObject.SetActive(true);
             dustSmoke.position = targetpoint + new Vector3(0, 0.5F, 0);
             dustSmoke.GetComponentInChildren<ParticleSystem>().Play();
@@ -298,7 +312,7 @@ public class SampleBoss : MonoBehaviour
     {
         print("Pattern3");//////
         StartCoroutine("LookPlayer");// 플레이어 바라보기
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
 
         StopCoroutine("LookPlayer");// 바라보기 중단
 
@@ -315,28 +329,26 @@ public class SampleBoss : MonoBehaviour
         // 플레이어 따라가기/////////////////////
         curTime = 0;
         Vector3 target = getTargetPosition();
-        while (curTime < 10F)
+        while (curTime < 10F && Vector3.Distance(transform.position, target) > 5F)
         {
-            if (Vector3.Distance(transform.position, target) > 0.1F)
-            {
-                target = getTargetPosition();
-                Vector3 direction = (target - transform.position).normalized;
-                transform.position += direction * Time.deltaTime * chaseSpeed;
-            }
+            target = getTargetPosition();
+            Vector3 direction = (target - transform.position).normalized;
+            transform.position += direction * Time.deltaTime * chaseSpeed;
+
             yield return new WaitForEndOfFrame();
         }
-        yield return new WaitForSeconds(0.5F);
+        yield return new WaitForSeconds(0.2F);
         //////////////////////////////////////
 
         // 낙하 공격/////////////////////////////////////
         Vector3 downVelocity = Vector3.zero;// 낙하 속도
-        float downAcceleration = 100F;// 낙하 가속도
+        float downAcceleration = 150F;// 낙하 가속도
         while (transform.position.y > 0)
         {
-            downVelocity += -transform.up * Time.deltaTime * downAcceleration;
-            transform.position += downVelocity * Time.deltaTime;
+            downVelocity += -transform.up * Time.fixedDeltaTime * downAcceleration;
+            transform.position += downVelocity * Time.fixedDeltaTime;
             print("force down");
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForFixedUpdate();
         }
         ///////////////////////////////////////////////
 
@@ -345,16 +357,19 @@ public class SampleBoss : MonoBehaviour
         shockWave.position = transform.position + new Vector3(0, 0.5F, 0);
         shockWave.GetComponentInChildren<ParticleSystem>().Play();
 
-        if (shockWaveCollider.colliderCheck)
+        for (int i = 0; i < 5F; i++)
         {
-            print("yes");
-            User_Manager.hp -= attackPower;
-            User_Manager.instance.Damaged();
+            if (shockWaveCollider.colliderCheck)
+            {
+                print("yes");
+                User_Manager.hp -= attackPower;
+                User_Manager.instance.Damaged();
+            }
+            yield return new WaitForSeconds(0.2F);
         }
 
-        yield return new WaitForSeconds(1);
         shockWave.GetComponentInChildren<ParticleSystem>().Stop();
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         //////////////////////////////////////////////////////////////////
 
         // 초기화 작업//////////////////////////
@@ -363,6 +378,43 @@ public class SampleBoss : MonoBehaviour
 
         bossState = BossState.Idle;
         //////////////////////////////////////
+    }
+
+    IEnumerator Phase2()
+    {
+        print("Phase2");//////
+        animator.SetInteger("state", 0);
+        StartCoroutine("LookPlayer");// 플레이어를 바라본다
+        yield return new WaitForSeconds(0.2F);
+
+        while (Vector3.Distance(transform.position, getTargetPosition()) > attackRange)
+        {
+            bossState = BossState.Move;
+
+            yield return new WaitForEndOfFrame();
+        }
+
+        StopCoroutine("LookPlayer");
+        StopMove();
+
+        yield return new WaitForSeconds(0.1F);
+
+        animator.SetInteger("state", 3);
+        animator.SetTrigger("attack");
+
+        yield return new WaitForSeconds(1F);
+        if (meleeCollider.colliderCheck)
+        {
+            print("Attack!!!");
+            User_Manager.hp -= attackPower;
+            User_Manager.instance.Damaged();
+        }
+        animator.ResetTrigger("attack");// 전투 상태
+
+        yield return new WaitForSeconds(0.8F);
+
+        curTime = 0;
+        bossState = BossState.Idle;
     }
     #endregion
 
@@ -374,6 +426,7 @@ public class SampleBoss : MonoBehaviour
         // 피해 입고 쿨타임
         if (curTime >= damagedCool)
         {
+            StopAllCoroutines();
             if (hP / maxHP <= 0F)
             {
                 animator.SetTrigger("dead");
@@ -401,6 +454,8 @@ public class SampleBoss : MonoBehaviour
 
     IEnumerator ThirdDamaged()
     {
+        print("nonono");
+
         // 점프///////////////////////////////////////////////////////////////////
         Vector3 jumpPosition = transform.position + new Vector3(0, jumpHight, 0);
         while (transform.position.y < jumpPosition.y - 0.1F)
@@ -431,7 +486,7 @@ public class SampleBoss : MonoBehaviour
     {
         print("move");//////
         isRunning = true;// 움직인다고 알리기
-        transform.Translate(transform.forward * moveSpeed);// 움직이기
+        transform.position += transform.forward * moveSpeed * Time.deltaTime;// 움직이기
         animator.SetInteger("state", 1);
     }
     #endregion
@@ -441,10 +496,17 @@ public class SampleBoss : MonoBehaviour
     {
         print("Chase");//////
         isRunning = true;// 움직인다고 알리기
-        transform.Translate(transform.forward * chaseSpeed);// 움직이기
+        transform.position += transform.forward * chaseSpeed * Time.deltaTime;// 움직이기
         animator.SetInteger("state", 2);
     }
     #endregion
+
+    void StopMove()
+    {
+        print("Stop");
+        animator.SetInteger("state", 0);
+        bossState = BossState.Wait;
+    }
 
     #region 죽음 상태
     void Dead()
@@ -467,7 +529,7 @@ public class SampleBoss : MonoBehaviour
     #region 플레이어 바라보기
     IEnumerator LookPlayer()
     {
-        print("LookPlayer");//////
+        print("Looking");//////
 
         // 계속 플레이어쪽을 바라보기
         while (true)
@@ -485,7 +547,7 @@ public class SampleBoss : MonoBehaviour
     void TracePlayer()
     {
         agent.enabled = true;// 에이전트 켜기
-        agent.SetDestination(player.position);// 플레이어를 따라가도록
+        agent.SetDestination(getTargetPosition());// 플레이어를 따라가도록
     }
     #endregion
 
