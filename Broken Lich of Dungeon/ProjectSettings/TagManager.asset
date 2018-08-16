@@ -5,12 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
-  - shop
-<<<<<<< HEAD
-  - Boss
-=======
-  - weapon
->>>>>>> origin/yudahee
   layers:
   - Default
   - TransparentFX
