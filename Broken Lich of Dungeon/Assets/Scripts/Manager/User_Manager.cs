@@ -20,19 +20,6 @@ public class User_Manager : MonoBehaviour
 
     //유저의 정보
     public static float LV = 1;// 유저 레벨
-<<<<<<< HEAD
-    //외부 요인 따라 변하는 유저의 정보
-    public static float attack;
-    public static float hp ;// 체력
-    public static float max_hp;
-
-    //스텟
-    public static float power = 5;// 힘
-    public static float health = 5;// 헬스
-
-    //유저의 장비
-    public static string right_weapon_slot = "스틸 대거";// 장비 슬롯
-=======
     
     //스텟
     public static float power = 5;// 힘
@@ -46,7 +33,6 @@ public class User_Manager : MonoBehaviour
     //유저의 장비
     public static string right_weapon_slot = "스틸 대거";// 오른손 장비 슬롯
     public static string left_weapon_slot = "버클러";// 왼손 장비 슬롯
->>>>>>> origin/yudahee
     //장착한 장비의 데미지
     public static float weapon_Damage;
     public static float weapon_Health;
@@ -82,13 +68,8 @@ public class User_Manager : MonoBehaviour
     #region 시작 함수
     void Start()
     {
-<<<<<<< HEAD
-        max_hp = health * 20;
         hp = max_hp;
-        attack = power * 2 + weapon_Damage;// 공격력
 
-=======
->>>>>>> origin/yudahee
         alive = true;
 
         tempColor = new Color();
@@ -107,6 +88,7 @@ public class User_Manager : MonoBehaviour
             text_power.text = "힘 : " + power;
             text_health.text = "체력 : " + health;
             text_right_weapon.text = "오른손 장비 : " + right_weapon_slot;
+            text_left_weapon.text = "왼손 장비 : " + left_weapon_slot;
             text_attackPoint.text = "공격력 : " + attack;
             UI.SetActive(true);
         }

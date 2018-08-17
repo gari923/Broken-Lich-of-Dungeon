@@ -11,17 +11,17 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
-    #region 멤버 변수
-    public static GameManager instance;// 싱글톤 변수
+    public static GameManager instance;//싱글톤 변수
 
-    // 각각의 방에 들어갔는지 체크하는 플래그
+    #region 멤버 변수
+    //각각의 방에 들어갔는지 체크하는 플래그
     bool enemy_Check = true;
     bool patience_Check = true;
     bool knife_Check = true;
     bool projectile_Check = true;
     bool door_Check = true;
 
-    // 각각의 방
+    //각각의 방
     public GameObject start_Room;
     public GameObject last_Room;
     public GameObject enemy_Room;
@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     public GameObject projectile_Room;
     public GameObject door_Room;
 
-    // 각각의 방의 시작지점
+    //각각의 방의 시작지점
     public Transform start_Room_StartPoint;
     public Transform last_Room_StartPoint;
     public Transform enemy_Room_StartPoint;
@@ -39,16 +39,16 @@ public class GameManager : MonoBehaviour
     public Transform projectile_Room_StartPoint;
     public Transform door_Room_StartPoint;
 
-    GameObject player;// 플레이어
-    GameObject currentRoom;
+    GameObject player;//플레이어
+    GameObject currentRoom;//현재 플레이어의 룸
 
-    // 다른 방으로 갈수 있는지 확인하는 변수(각 방에서 조건을 완료시키면 true)
+    //다른 방으로 갈수 있는지 확인하는 변수(각 방에서 조건을 완료시키면 true)
     public bool rock = false;
-    // 플레이어가 이동의 상호작용을 활성화 확인(각 방에서 이동 상호작용을 누르면 true)
+    //플레이어가 이동의 상호작용을 활성화 확인(각 방에서 이동 상호작용을 누르면 true)
     public bool move = false;
-    // 방클리어 확인하는 변수
+    //방클리어 확인하는 변수
     public bool clear = false;
-
+     
     bool alivehp = false;
 
     public GameObject fadeObj;
@@ -58,7 +58,6 @@ public class GameManager : MonoBehaviour
     Color fadeColor;
 
     bool endPlayerMove = true;
-
     #endregion
 
     #region 어웨이크 함수
@@ -84,12 +83,10 @@ public class GameManager : MonoBehaviour
     #region 업데이트 함수
     void Update()
     {
-        // 모든 방이 비활성화일 경우 마지막방을 활성화
-
-
         // Rock 이 True이고 플레이어가 상호작용키를 눌렀을 경우 방을 랜덤으로 이동
         if (rock == true && move == true)
         {
+            //모든방이 비활성화일 경우 마지막방으로 이동한다
             if (enemy_Check == false
             && patience_Check == false
             && knife_Check == false

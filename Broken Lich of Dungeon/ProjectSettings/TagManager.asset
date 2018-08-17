@@ -6,11 +6,8 @@ TagManager:
   tags:
   - Enemy
   - shop
-<<<<<<< HEAD
-  - Boss
-=======
   - weapon
->>>>>>> origin/yudahee
+  - shield
   layers:
   - Default
   - TransparentFX

@@ -15,7 +15,6 @@ using UnityEngine;
 
 public class Start_Room : MonoBehaviour
 {
-    //텍스트가 작동하고 문이 작동하면 탈출을 할수 있다
     //방의 변수 필요
     public GameObject start_Room;
 
@@ -24,19 +23,17 @@ public class Start_Room : MonoBehaviour
 
     void Start()
     {
-        Player.instance.ps = pState.Idle;
+        Player.instance.ps = pState.Idle;//플레이어의 상태를 아이들 상태로 만든다
         GameManager.instance.rock = true;//방의 클리어 조건을 완료시킨다
     }
 
     void Update()
     {
-        Player.instance.anim.SetTrigger("IdleMode");
+        Player.instance.anim.SetTrigger("IdleMode");//플레이어의 이이들 애니메이션을 실행시킨다
+        Player.instance.ps = pState.Idle;//플레이어의 상태를 아이들 상태로 만든다
         GameManager.instance.rock = true;//방의 클리어 조건을 완료시킨다
 
-        Player.instance.ps = pState.Idle;
-
-        //방의 기믹들을 작동시키고 싶다
-        //만약 버튼이 클릭되었고 레이가 door에 닿았다면
+        //만약 버튼이 클릭되었고 레이가 door에 닿았다면 문을연다
         if (Player.instance.buttonClicked)
         {
             if (Player.instance.rayObjectclick)
@@ -44,7 +41,7 @@ public class Start_Room : MonoBehaviour
                 switch (Player.instance.rayObjectclick.name)
                 {
                     case "Door":
-                        OpenDoor();
+                        door_Action_Check = true;
                         break;
                 }
             }
@@ -53,14 +50,8 @@ public class Start_Room : MonoBehaviour
         //방의 클리어 조건을 완료했고 문을 동작시켰다면
         if (GameManager.instance.rock == true && door_Action_Check == true)
         {
-            GameManager.instance.move = true;
             door_Action_Check = false;
-            //start_Room.SetActive(false);
+            GameManager.instance.move = true;
         }
-    }
-    
-    void OpenDoor()
-    { 
-            door_Action_Check = true;
     }
 }
