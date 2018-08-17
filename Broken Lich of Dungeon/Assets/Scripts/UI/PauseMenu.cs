@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
-    public SaveClass saveData;
     public Player playerScript;
     public GameObject pauseUI;
+    SaveClass saveData;
 
     bool paused = false;
 
     void Start()
     {
+        saveData = (SaveClass)AssetDatabase.
+                LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
 
         pauseUI.SetActive(false);
     }

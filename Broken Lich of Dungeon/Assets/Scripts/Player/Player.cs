@@ -200,18 +200,9 @@ public class Player : MonoBehaviour
                     {
                         hitInfo.transform.GetComponent<Enemy>().Damaged(User_Manager.attack);
                     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    if (hitInfo.transform.tag == "Boss")
-=======
                     if (hitInfo.transform.tag.Equals("Boss"))
->>>>>>> origin/tails007
                     {
                         print("BossAttack!!!");
-=======
-                    if (hitInfo.transform.name == "SampleBossPhase1")
-                    {
->>>>>>> origin/yudahee
                         hitInfo.transform.SendMessage("DamageOrNot");
                     }
                 }

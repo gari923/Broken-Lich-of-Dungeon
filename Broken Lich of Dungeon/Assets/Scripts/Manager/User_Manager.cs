@@ -23,38 +23,20 @@ public class User_Manager : MonoBehaviour
 
     //유저의 정보
     public static float LV = 1;// 유저 레벨
-<<<<<<< HEAD
     //외부 요인 따라 변하는 유저의 정보
     public static float attack;
     public static float hp;// 체력
     public static float max_hp;
 
-=======
     
->>>>>>> origin/yudahee
     //스텟
     public static float power = 5;// 힘
     public static float health = 5;// 헬스
 
-<<<<<<< HEAD
-    //유저의 장비
-<<<<<<< HEAD
-    public static string right_weapon_slot = "스틸 대거";// 오른손 장비 슬롯
-    public static string left_weapon_slot = "버클러";// 왼손 장비 슬롯
-=======
-    public static string right_weapon_slot = "스틸 대거";// 장비 슬롯
-    public static string left_weapon_slot;
->>>>>>> origin/tails007
-=======
-    //외부 요인 따라 변하는 유저의 정보
-    public static float attack = power * 2 + weapon_Damage;// 공격력
-    public static float max_hp = health * 20 + weapon_Health;// 최대 체력
-    public static float hp = max_hp;// 체력
-
     //유저의 장비
     public static string right_weapon_slot = "스틸 대거";// 오른손 장비 슬롯
     public static string left_weapon_slot = "버클러";// 왼손 장비 슬롯
->>>>>>> origin/yudahee
+   
     //장착한 장비의 데미지
     public static float weapon_Damage;
     public static float weapon_Health;
@@ -115,14 +97,8 @@ public class User_Manager : MonoBehaviour
     #region 시작 함수
     void Start()
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
         max_hp = health * 20 + weapon_Health;
-=======
-        max_hp = health * 20;
->>>>>>> origin/tails007
-=======
->>>>>>> origin/yudahee
+        attack = power * 2 + weapon_Damage;
         hp = max_hp;
 
         alive = true;
