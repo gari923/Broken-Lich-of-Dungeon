@@ -126,7 +126,8 @@ public class Enemy : MonoBehaviour
         {
             curTime = 0;// 경과 시간 초기화
             es = EState.Move;
-            anim.SetTrigger("Move");
+            //anim.SetTrigger("Move");
+            anim.SetInteger("State", 0);
         }
     }
     #endregion
@@ -134,7 +135,8 @@ public class Enemy : MonoBehaviour
     #region move 상태 함수
     void Move()
     {
-        anim.SetTrigger("Move");
+        //anim.SetTrigger("Move");
+        anim.SetInteger("State", 0);
         agent.enabled = true;
         mag = Vector3.Distance(target.position,
             transform.position);// 플레이어와 적 사이의 거리
@@ -330,6 +332,7 @@ public class Enemy : MonoBehaviour
             if (attack_range >= mag)
             {
                 anim.SetTrigger("Attack");
+                //anim.SetInteger("State", 1);
                 curTime = 0;// 경과 시간 초기화
                 User_Manager.hp -= enemy_damage;// 플레이어 피깎
                 User_Manager.instance.Damaged();
@@ -337,7 +340,8 @@ public class Enemy : MonoBehaviour
             else
             {
                 es = EState.Move;
-                anim.SetTrigger("Move");
+                //anim.SetTrigger("Move");
+                anim.SetInteger("State", 0);
                 curTime = 0;// 경과 시간 초기화
             }
         }
@@ -352,6 +356,7 @@ public class Enemy : MonoBehaviour
         EnemyAngle();
 
         anim.SetTrigger("Damage");
+        //anim.SetInteger("State", 2);
 
         if (radi >= viewAngle)
         {
@@ -377,13 +382,15 @@ public class Enemy : MonoBehaviour
                 }
             }
             es = EState.Attack;
-            anim.SetTrigger("Move");
+            //anim.SetTrigger("Move");
+            anim.SetInteger("State", 0);
         }
         else
         {
             enemy_hp -= damage;
             es = EState.Move;
-            anim.SetTrigger("Move");
+            //anim.SetTrigger("Move");
+            anim.SetInteger("State", 0);
         }
 
         // 만약 시야범위 내에 플레이어가 없는데 공격을 당하면 데미지 두배(백어택)
@@ -397,6 +404,7 @@ public class Enemy : MonoBehaviour
         {
             es = EState.Dead;
             anim.SetTrigger("Dead");
+            //anim.SetInteger("State", 3);
             transform.GetComponent<CapsuleCollider>().enabled = false;
         }
 
@@ -416,14 +424,16 @@ public class Enemy : MonoBehaviour
             {
                 agent.destination = agent.pathEndPosition;
                 es = EState.Move;
-                anim.SetTrigger("Move");
+                //anim.SetTrigger("Move");
+                anim.SetInteger("State", 0);
             }
         }
         // 플레이어를 쫓는다.
         else
         {
             agent.destination = target.position;
-            anim.SetTrigger("Move");
+            //anim.SetTrigger("Move");
+            anim.SetInteger("State", 0);
         }
     }
 
