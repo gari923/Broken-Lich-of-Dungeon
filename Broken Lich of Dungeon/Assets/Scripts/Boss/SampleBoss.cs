@@ -176,6 +176,8 @@ public class SampleBoss : MonoBehaviour
     #region 공격 상태
     void Combat()
     {
+        animator.ResetTrigger("attack");
+        animator.ResetTrigger("damage");
         print("Combat");//////
         animator.SetInteger("state", 3);
         isInvincible = false;
@@ -402,7 +404,7 @@ public class SampleBoss : MonoBehaviour
         animator.SetInteger("state", 3);
         animator.SetTrigger("attack");
 
-        yield return new WaitForSeconds(1F);
+        yield return new WaitForSeconds(0.8F);
         if (meleeCollider.colliderCheck)
         {
             print("Attack!!!");
@@ -571,6 +573,7 @@ public class SampleBoss : MonoBehaviour
     {
         if (!isInvincible)
         {
+            animator.ResetTrigger("attack");
             StopAllCoroutines();
             isInvincible = true;// 무적상태로 만들기
 
@@ -583,7 +586,7 @@ public class SampleBoss : MonoBehaviour
             else
             {
                 animator.SetTrigger("damage");
-                animator.SetInteger("state", 999);
+                animator.SetInteger("state", 0);
                 bossState = BossState.Damaged;
             }
 

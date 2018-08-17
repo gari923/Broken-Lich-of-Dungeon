@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    public SaveClass saveData;
     public Player playerScript;
     public GameObject pauseUI;
 
@@ -42,6 +43,15 @@ public class PauseMenu : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            print(saveData);
+
+            saveData.savedGold = User_Manager.gold;
+            saveData.savedLV = User_Manager.LV;
+            saveData.savedHealth = User_Manager.health;
+            saveData.savedPower = User_Manager.power;
+            saveData.savedLeftWeapon = User_Manager.left_weapon_slot;
+            saveData.savedRightWeapon = User_Manager.right_weapon_slot;
+
             print("outside");
             pauseUI.transform.forward = Camera.main.transform.forward;
             pauseUI.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
