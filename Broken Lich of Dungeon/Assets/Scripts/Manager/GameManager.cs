@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    private void Start()
+    void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         fadeImg = fadeObj.transform.GetComponentInChildren<Image>();
@@ -230,6 +230,7 @@ public class GameManager : MonoBehaviour
 
         // 플레이어를 해당 방으로 이동시킨다.
         player.transform.position = room.transform.position;
+        player.transform.rotation = room.transform.rotation;
 
         currentRoom.SetActive(false);
 

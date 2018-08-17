@@ -67,7 +67,7 @@ public class EnemyRoom : MonoBehaviour
             }
         }
 
-        if (spawnPool.Count == 0 && getStart == true && GameObject.Find("SampleBossPhase1") == null)
+        if (spawnPool.Count == 0 && getStart == true && GameObject.FindGameObjectsWithTag("Boss").Length == 0)
         {
             enemy_Remove_Check = true;
             Player.instance.ps = pState.Idle;
