@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class Shop_Manager : MonoBehaviour
 {
-    //싱글톤
-    public static Shop_Manager instance;
+    public static Shop_Manager instance;//싱글톤
 
+    #region 변수
     //대화하기 창 변수
     public GameObject dialog;
     //상점 리스트 창 변수
@@ -20,6 +20,9 @@ public class Shop_Manager : MonoBehaviour
     public Text gold;
     //플레이어 변수
     public Transform player;
+    //플레이어의 손 변수
+    public GameObject player_right_hand;
+    public GameObject player_left_hand;
     //유니티짱의 변수
     public Transform unitychan;
     //유니티짱의 기본 방향 변수
@@ -39,9 +42,10 @@ public class Shop_Manager : MonoBehaviour
     string current_list;
 
     //상점에서 부르는값
-    string item_name;
-    float buy_gold;
-    float amount;
+    string item_name;//아이템 이름
+    float buy_gold;//아이템 구매 비용
+    float amount;//아이템 수치
+    int item_num;//아이템 번호
     string weapon_type; //무기 타입
     string expendables_type; //소모품 타입
     string state_type; //스텟 타입
@@ -50,8 +54,7 @@ public class Shop_Manager : MonoBehaviour
     bool dialog_state = false;
     //상점창이 열려있는지 확인하는 변수
     public bool shop_state = false;
-
-    float cheat_num = 0;
+    #endregion
 
     #region 어웨이크
     private void Awake()
@@ -63,14 +66,11 @@ public class Shop_Manager : MonoBehaviour
     }
     #endregion
 
-    #region 스타트
     void Start()
     {
         //유니티짱이 바라보는 기본 방향
         baseRotation = Quaternion.Euler(new Vector3(0, 0, 0));
     }
-    #endregion
-
     void Update()
     {
         #region 유니티짱 행동
@@ -241,7 +241,8 @@ public class Shop_Manager : MonoBehaviour
             }
             #endregion
 
-            //만약 리스가 무기이고 페이지의 버튼을눌렀다면
+            #region 구매버튼
+            //만약 리스트가 ""이고 페이지의 버튼을눌렀다면
             switch (current_list)
             {
                 case "무기":
@@ -255,30 +256,38 @@ public class Shop_Manager : MonoBehaviour
                         {
                             User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            //무기의 타입이 ""이라면
                             switch (weapon_type)
                             {
                                 case "무기":
-                                    User_Manager.right_weapon_slot = item_name;
+                                    GameObject currentWeapon = GameObject.FindWithTag("weapon");//무기태그를 가진 오브젝트를 찾는다
+                                    currentWeapon.SetActive(false);//무기태그를 가진 오브젝트를 비활성화 시킨다.
+                                    player_right_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 오른손에 있는 무기를 무기번호에따라 활성화 시킨다
+                                    User_Manager.right_weapon_slot = item_name;//유저의 오른손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
                                     User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
                                     break;
                                 case "방패":
-                                    User_Manager.left_weapon_slot = item_name;
+                                    GameObject currentShield = GameObject.FindWithTag("shield");//방패태그를 가진 오브젝트를 찾는다
+                                    currentShield.SetActive(false);//방패태그를 가진 오브젝트를 비활성화 시킨다.
+                                    player_left_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 왼손에 있는 방패를 무기번호에따라 활성화 시킨다
+                                    User_Manager.left_weapon_slot = item_name;//유저의 왼손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
                                     User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
+                                    //만약 플레이어의 현재hp에 회복량을 더한값이 max_hp보다 크다면
                                     if (User_Manager.hp + amount > User_Manager.max_hp)
                                     {
-                                        User_Manager.hp = User_Manager.max_hp;
+                                        User_Manager.hp = User_Manager.max_hp;//플레이어의 현재hp를 max_hp에 맞춘다
                                     }
+                                    //만약 플레이어의 현재hp에 회복량을 더한값이 max_hp보다 작거나 같다면
                                     else if (User_Manager.hp + amount <= User_Manager.max_hp)
                                     {
-                                        User_Manager.hp += amount;
+                                        User_Manager.hp += amount;//플레이어의 현재hp에 회복량을 더한다
                                     }
                                     break;
                             }
                         }
                     }
-
                     //2번째 리스트 버튼을 눌렀을때
                     else if (Player.instance.rayObject.name == "btn_List2" && Player.instance.buttonClicked == true)
                     {
@@ -289,29 +298,39 @@ public class Shop_Manager : MonoBehaviour
                         {
                             User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            //무기의 타입이 ""이라면
                             switch (weapon_type)
                             {
                                 case "무기":
-                                    User_Manager.right_weapon_slot = item_name;
+                                    GameObject currentWeapon = GameObject.FindWithTag("weapon");//무기태그를 가진 오브젝트를 찾는다
+                                    currentWeapon.SetActive(false);//무기태그를 가진 오브젝트를 비활성화 시킨다.
+                                    player_right_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 오른손에 있는 무기를 무기번호에따라 활성화 시킨다
+                                    User_Manager.right_weapon_slot = item_name;//유저의 오른손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
                                     User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
                                     break;
                                 case "방패":
-                                    User_Manager.left_weapon_slot = item_name;
+                                    GameObject currentShield = GameObject.FindWithTag("shield");//방패태그를 가진 오브젝트를 찾는다
+                                    currentShield.SetActive(false);//방패태그를 가진 오브젝트를 비활성화 시킨다.
+                                    player_left_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 왼손에 있는 방패를 무기번호에따라 활성화 시킨다
+                                    User_Manager.left_weapon_slot = item_name;//유저의 왼손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
                                     User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
+                                    //만약 플레이어의 현재hp에 회복량을 더한값이 max_hp보다 크다면
                                     if (User_Manager.hp + amount > User_Manager.max_hp)
                                     {
-                                        User_Manager.hp = User_Manager.max_hp;
+                                        User_Manager.hp = User_Manager.max_hp;//플레이어의 현재hp를 max_hp에 맞춘다
                                     }
+                                    //만약 플레이어의 현재hp에 회복량을 더한값이 max_hp보다 작거나 같다면
                                     else if (User_Manager.hp + amount <= User_Manager.max_hp)
                                     {
-                                        User_Manager.hp += amount;
+                                        User_Manager.hp += amount;//플레이어의 현재hp에 회복량을 더한다
                                     }
                                     break;
                             }
                         }
                     }
+                    //3번째 리스트 버튼을 눌렀을때
                     else if (Player.instance.rayObject.name == "btn_List3" && Player.instance.buttonClicked == true)
                     {
                         list_num = 3;
@@ -321,30 +340,40 @@ public class Shop_Manager : MonoBehaviour
                         {
                             User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
+                            //무기의 타입이 ""이라면
                             switch (weapon_type)
                             {
                                 case "무기":
-                                    User_Manager.right_weapon_slot = item_name;
+                                    GameObject currentWeapon = GameObject.FindWithTag("weapon");//무기태그를 가진 오브젝트를 찾는다
+                                    currentWeapon.SetActive(false);//무기태그를 가진 오브젝트를 비활성화 시킨다.
+                                    player_right_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 오른손에 있는 무기를 무기번호에따라 활성화 시킨다
+                                    User_Manager.right_weapon_slot = item_name;//유저의 오른손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
                                     User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
                                     break;
                                 case "방패":
-                                    User_Manager.left_weapon_slot = item_name;
+                                    GameObject currentShield = GameObject.FindWithTag("shield");//방패태그를 가진 오브젝트를 찾는다
+                                    currentShield.SetActive(false);//방패태그를 가진 오브젝트를 비활성화 시킨다.
+                                    player_left_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 왼손에 있는 방패를 무기번호에따라 활성화 시킨다
+                                    User_Manager.left_weapon_slot = item_name;//유저의 왼손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
                                     User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
+                                    //만약 플레이어의 현재hp에 회복량을 더한값이 max_hp보다 크다면
                                     if (User_Manager.hp + amount > User_Manager.max_hp)
                                     {
-                                        User_Manager.hp = User_Manager.max_hp;
+                                        User_Manager.hp = User_Manager.max_hp;//플레이어의 현재hp를 max_hp에 맞춘다
                                     }
+                                    //만약 플레이어의 현재hp에 회복량을 더한값이 max_hp보다 작거나 같다면
                                     else if (User_Manager.hp + amount <= User_Manager.max_hp)
                                     {
-                                        User_Manager.hp += amount;
+                                        User_Manager.hp += amount;//플레이어의 현재hp에 회복량을 더한다
                                     }
                                     break;
                             }
                         }
                     }
                     break;
+
                 case "소모품":
                     //1번째 리스트 버튼을 눌렀을때
                     if (Player.instance.rayObject.name == "btn_List1" && Player.instance.buttonClicked == true)
@@ -416,6 +445,7 @@ public class Shop_Manager : MonoBehaviour
                         }
                     }
                     break;
+
                 case "스텟":
                     //1번째 리스트 버튼을 눌렀을때
                     if (Player.instance.rayObject.name == "btn_List1" && Player.instance.buttonClicked == true)
@@ -426,10 +456,10 @@ public class Shop_Manager : MonoBehaviour
                         //유저가 가진 돈이 아이템의 가격보다 많다면
                         if (User_Manager.gold >= buy_gold)
                         {
-                            print("내 돈 : " + User_Manager.gold + " 가격 : " + buy_gold);
                             User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
                             User_Manager.LV += 1; //유저의 LV을 올린다
+                            //스텟 타입이 ""이라면
                             switch (state_type)
                             {
                                 case "힘":
@@ -461,6 +491,7 @@ public class Shop_Manager : MonoBehaviour
                             User_Manager.gold -= buy_gold;//유저의 돈에서 아이템 가격을 뺸다
                             gold.text = User_Manager.gold.ToString();//상점의 골드 텍스트를 유저의 골드 텍스트로 바꾼다
                             User_Manager.LV += 1; //유저의 LV을 올린다
+                            //스텟 타입이 ""이라면
                             switch (state_type)
                             {
                                 case "힘":
@@ -483,9 +514,7 @@ public class Shop_Manager : MonoBehaviour
                     break;
             }
         }
-
-
-
+        #endregion
     }
 
 
@@ -499,6 +528,7 @@ public class Shop_Manager : MonoBehaviour
                 switch (list_num)//리스트 번호에 따른 리스트를 보여준다
                 {
                     case 1:
+                        item_num = 1;
                         item_name = "롱소드";
                         buy_gold = 1000;
                         amount = 3;
@@ -506,6 +536,7 @@ public class Shop_Manager : MonoBehaviour
                         list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 2:
+                        item_num = 2;
                         item_name = "카타나";
                         buy_gold = 1900;
                         amount = 5;
@@ -513,6 +544,7 @@ public class Shop_Manager : MonoBehaviour
                         list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 3:
+                        item_num = 3;
                         item_name = "헨드엑스";
                         buy_gold = 3000;
                         amount = 8;
@@ -525,6 +557,7 @@ public class Shop_Manager : MonoBehaviour
                 switch (list_num)//리스트 번호에 따른 리스트를 보여준다
                 {
                     case 1:
+                        item_num = 4;
                         item_name = "팔시온";
                         buy_gold = 4500;
                         amount = 12;
@@ -532,6 +565,7 @@ public class Shop_Manager : MonoBehaviour
                         list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 2:
+                        item_num = 5;
                         item_name = "브로드소드";
                         buy_gold = 6000;
                         amount = 15;
@@ -539,6 +573,7 @@ public class Shop_Manager : MonoBehaviour
                         list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 3:
+                        item_num = 6;
                         item_name = "사이즈";
                         buy_gold = 7500;
                         amount = 19;
@@ -551,6 +586,7 @@ public class Shop_Manager : MonoBehaviour
                 switch (list_num)//리스트 번호에 따른 리스트를 보여준다
                 {
                     case 1:
+                        item_num = 7;
                         item_name = "클레이모어";
                         buy_gold = 10000;
                         amount = 23;
@@ -558,6 +594,7 @@ public class Shop_Manager : MonoBehaviour
                         list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 2:
+                        item_num = 8;
                         item_name = "그레이트엑스";
                         buy_gold = 11500;
                         amount = 25;
@@ -565,6 +602,7 @@ public class Shop_Manager : MonoBehaviour
                         list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 3:
+                        item_num = 9;
                         item_name = "플람베르쥬";
                         buy_gold = 13000;
                         amount = 28;
@@ -577,6 +615,7 @@ public class Shop_Manager : MonoBehaviour
                 switch (list_num)//리스트 번호에 따른 리스트를 보여준다
                 {
                     case 1:
+                        item_num = 10;
                         item_name = "배틀액스";
                         buy_gold = 15000;
                         amount = 32;
@@ -584,6 +623,7 @@ public class Shop_Manager : MonoBehaviour
                         list1.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 2:
+                        item_num = 11;
                         item_name = "투헨드소드";
                         buy_gold = 18000;
                         amount = 36;
@@ -591,6 +631,7 @@ public class Shop_Manager : MonoBehaviour
                         list2.text = item_name + " / " + weapon_type + " / 공격력 + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 3:
+                        item_num = 12;
                         item_name = "그람";
                         buy_gold = 22000;
                         amount = 40;
@@ -603,6 +644,7 @@ public class Shop_Manager : MonoBehaviour
                 switch (list_num)//리스트 번호에 따른 리스트를 보여준다
                 {
                     case 1:
+                        item_num = 1;
                         item_name = "히터쉴드";
                         buy_gold = 8000;
                         amount = 100;
@@ -610,6 +652,7 @@ public class Shop_Manager : MonoBehaviour
                         list1.text = item_name + " / " + weapon_type + " / Max Hp + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 2:
+                        item_num = 2;
                         item_name = "스파이크쉴드";
                         buy_gold = 19500;
                         amount = 200;
@@ -617,6 +660,7 @@ public class Shop_Manager : MonoBehaviour
                         list2.text = item_name + " / " + weapon_type + " / Max Hp + " + amount + "\n/ " + buy_gold + " Gold";
                         break;
                     case 3:
+                        item_num = 3;
                         item_name = "타워쉴드";
                         buy_gold = 30000;
                         amount = 300;
