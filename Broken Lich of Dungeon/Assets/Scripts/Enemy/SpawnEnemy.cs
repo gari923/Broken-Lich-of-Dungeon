@@ -35,6 +35,7 @@ public class SpawnEnemy : MonoBehaviour
     #region 업데이트 함수
     void Update()
     {
+        
         curTime += Time.deltaTime;// 경과 시간 할당
 
         // 스폰 간격마다 적을 스폰
