@@ -19,11 +19,7 @@ public class Start_Room : MonoBehaviour
     #region 멤버 변수
     //방의 변수 필요
     public GameObject start_Room;
-    public Transform door;
 
-    Vector3 doorY;
-    float openTime = 2;
-    float curTime = 0;
     // 클리어 조건
     public bool door_Action_Check = false;
 
@@ -38,7 +34,6 @@ public class Start_Room : MonoBehaviour
 
         Player.instance.ps = pState.Idle;//플레이어의 상태를 아이들 상태로 만든다
         GameManager.instance.rock = true;//방의 클리어 조건을 완료시킨다
-        doorY = door.eulerAngles;
     }
     #endregion
 
@@ -66,6 +61,7 @@ public class Start_Room : MonoBehaviour
         //방의 클리어 조건을 완료했고 문을 동작시켰다면
         if (GameManager.instance.rock == true && door_Action_Check == true)
         {
+<<<<<<< HEAD
             StartCoroutine("DoorOpen");
 
             door_Action_Check = false;
@@ -111,7 +107,10 @@ public class Start_Room : MonoBehaviour
             doorY.y += Mathf.Lerp(-45, 0, Time.deltaTime);
             door.eulerAngles = doorY;
             yield return new WaitForEndOfFrame();
+=======
+            door_Action_Check = false;
+            GameManager.instance.move = true;
+>>>>>>> parent of 3329688... gari
         }
-
     }
 }
