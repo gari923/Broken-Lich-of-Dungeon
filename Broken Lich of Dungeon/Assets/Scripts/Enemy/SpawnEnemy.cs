@@ -26,6 +26,7 @@ public class SpawnEnemy : MonoBehaviour
         for (int i = 0; i < poolSize; i++)
         {
             GameObject enemy = Instantiate(enemyPref, transform.position, transform.rotation, transform);
+            // 데미지, 체력 높여서 생성
             enemy.SetActive(false);
             enemyActive.Add(enemy);
         }

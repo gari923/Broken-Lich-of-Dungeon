@@ -1666,7 +1666,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a58154c350c4ccf47a6cdad03a8dca1a, type: 3}
   m_Controller: {fileID: 9100000, guid: afcb420425baf804fbb498a95b01a92d, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -1857,11 +1857,11 @@ MonoBehaviour:
   attackDelay: 1.5
   stopDelay: 3
   destinationRange: 1
-  warningRange: 20
+  warningRange: 30
   deadTime: 3
-  enemy_damage: 40
+  enemy_damage: 20
   enemy_hp: 0
-  enemy_max_hp: 40
+  enemy_max_hp: 100
   enemy_drop_gold: 100000
   attack_range: 2
   es: 0

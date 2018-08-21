@@ -889,7 +889,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1821356178917454
 GameObject:
   m_ObjectHideFlags: 1
@@ -1942,7 +1942,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d4522b4f353f17142915782c04c3d8bd, type: 3}
   m_Controller: {fileID: 9100000, guid: 7cf0e2fca5a187f458391a77ec510610, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -2070,7 +2070,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveRange: 50
-  viewAngle: 120
+  viewAngle: 80
   pathRange: 1
   idleDelay: 1
   attackDelay: 1.5
@@ -2080,9 +2080,9 @@ MonoBehaviour:
   deadTime: 3
   enemy_damage: 40
   enemy_hp: 0
-  enemy_max_hp: 40
+  enemy_max_hp: 250
   enemy_drop_gold: 100000
-  attack_range: 2
+  attack_range: 3
   es: 0
   HP_Can: {fileID: 223508872202327182}
   HP_Bar: {fileID: 114968414684861436}
@@ -2524,7 +2524,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 3
+  m_Speed: 5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -36669,7 +36669,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -36687,7 +36687,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
