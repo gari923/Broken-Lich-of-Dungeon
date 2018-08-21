@@ -16,19 +16,18 @@ public class User_Manager : MonoBehaviour
     //attack = power*2 + weapon_Damage
     //hp = health *20 + weapon_Health
 
-
-    public static User_Manager instance;
+    public static User_Manager instance;// 싱글톤 변수
 
     public static float gold = 0;//유저의 소지 골드
 
     //유저의 정보
     public static float LV = 1;// 유저 레벨
-    //외부 요인 따라 변하는 유저의 정보
-    public static float attack;
-    public static float hp;// 체력
-    public static float max_hp;
 
-    
+    //외부 요인 따라 변하는 유저의 정보
+    public static float attack;// 공격력
+    public static float hp;// 체력
+    public static float max_hp;// 최대 체력
+
     //스텟
     public static float power = 5;// 힘
     public static float health = 5;// 헬스
@@ -36,14 +35,17 @@ public class User_Manager : MonoBehaviour
     //유저의 장비
     public static string right_weapon_slot = "스틸 대거";// 오른손 장비 슬롯
     public static string left_weapon_slot = "버클러";// 왼손 장비 슬롯
-   
+    public static int right_weapon_num;
+    public static int left_weapon_num;
+
     //장착한 장비의 데미지
-    public static float weapon_Damage;
-    public static float weapon_Health;
+    public static float weapon_Damage;// 무기 대미지
+    public static float weapon_Health;// 방패 체력
 
     //유저가 생존했는지 확인하는 변수
     public static bool alive = true;
 
+    // 스탯 표시
     public GameObject UI;
     public Text text_lv;
     public Text text_gold;
@@ -53,22 +55,26 @@ public class User_Manager : MonoBehaviour
     public Text text_right_weapon;
     public Text text_left_weapon;
     public Text text_attackPoint;
-    #endregion
 
     public GameObject damagedFX;
     public Image hpFX;
 
     Color tempColor;
 
+    public GameObject player_right_hand;
+    public GameObject player_left_hand;
+    #endregion
 
+    #region 어웨이크 함수
     void Awake()
     {
+        // 싱글톤 초기화
         if (instance == null)
         {
             instance = this;
         }
 
-
+        // 세이브 파일이 없을 경우 파일 생성
         if (!File.Exists("Assets/Data/SaveData.asset"))
         {
             SaveClass asset = SaveClass.CreateInstance<SaveClass>();
@@ -79,6 +85,7 @@ public class User_Manager : MonoBehaviour
 
             Selection.activeObject = asset;
         }
+        // 세이브 파일이 있을 경우 불러오기
         else
         {
             SaveClass saveData = (SaveClass)AssetDatabase.
@@ -86,24 +93,38 @@ public class User_Manager : MonoBehaviour
 
             gold = saveData.savedGold;
             LV = saveData.savedLV;
-            health = saveData.savedHealth;
+            attack = saveData.savedAttack;
+            hp = saveData.savedHP;
+            max_hp = saveData.savedMaxHP;
             power = saveData.savedPower;
+            health = saveData.savedHealth;
             left_weapon_slot = saveData.savedLeftWeapon;
             right_weapon_slot = saveData.savedRightWeapon;
+            weapon_Damage = saveData.savedWeaponDamage;
+            weapon_Health = saveData.savedWeaponHealth;
+            left_weapon_num = saveData.savedLeftNumber;
+            right_weapon_num = saveData.savedRightNumber;
         }
     }
-
+    #endregion
 
     #region 시작 함수
     void Start()
     {
-        max_hp = health * 20 + weapon_Health;
-        attack = power * 2 + weapon_Damage;
-        hp = max_hp;
+        max_hp = health * 20 + weapon_Health;// 최대 체력 계산
+        attack = power * 2 + weapon_Damage;// 공격력 계산
+        hp = max_hp;// hp 초기화
 
         alive = true;
 
         tempColor = new Color();
+
+        GameObject currentWeapon = GameObject.FindWithTag("weapon");// 무기태그를 가진 오브젝트를 찾는다
+        currentWeapon.SetActive(false);// 무기태그를 가진 오브젝트를 비활성화 시킨다.
+        GameObject currentShield = GameObject.FindWithTag("shield");// 무기태그를 가진 오브젝트를 찾는다
+        currentShield.SetActive(false);// 무기태그를 가진 오브젝트를 비활성화 시킨다.
+        player_right_hand.transform.GetChild(right_weapon_num).gameObject.SetActive(true);// 플레이어의 오른손에 있는 무기를 무기번호에따라 활성화
+        player_left_hand.transform.GetChild(left_weapon_num).gameObject.SetActive(true);// 플레이어의 오른손에 있는 무기를 무기번호에따라 활성화
     }
     #endregion
 
@@ -127,11 +148,8 @@ public class User_Manager : MonoBehaviour
         {
             UI.SetActive(false);
         }
-        if (hp < 0)
-        {
-            alive = false;
-        }
 
+        // hp에 따른 화면 어둡게 하기
         if (hp >= max_hp / 20)
         {
             tempColor = hpFX.color;
@@ -139,11 +157,13 @@ public class User_Manager : MonoBehaviour
             hpFX.color = tempColor;
         }
 
+        // 죽음 상태 플래그
         if (hp <= 0)
         {
             alive = false;
         }
 
+        // 최대 hp를 넘었을 때
         if (hp > max_hp)
         {
             tempColor = hpFX.color;
@@ -153,6 +173,7 @@ public class User_Manager : MonoBehaviour
     }
     #endregion
 
+    #region 대미지 받기
     public void Damaged()
     {
         //print(hp);
@@ -167,5 +188,5 @@ public class User_Manager : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         damagedFX.SetActive(false);
     }
-
+    #endregion
 }

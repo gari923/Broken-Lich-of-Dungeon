@@ -263,6 +263,7 @@ public class Shop_Manager : MonoBehaviour
                                     GameObject currentWeapon = GameObject.FindWithTag("weapon");//무기태그를 가진 오브젝트를 찾는다
                                     currentWeapon.SetActive(false);//무기태그를 가진 오브젝트를 비활성화 시킨다.
                                     player_right_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 오른손에 있는 무기를 무기번호에따라 활성화 시킨다
+                                    User_Manager.right_weapon_num = item_num;
                                     User_Manager.right_weapon_slot = item_name;//유저의 오른손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
                                     User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
@@ -271,6 +272,7 @@ public class Shop_Manager : MonoBehaviour
                                     GameObject currentShield = GameObject.FindWithTag("shield");//방패태그를 가진 오브젝트를 찾는다
                                     currentShield.SetActive(false);//방패태그를 가진 오브젝트를 비활성화 시킨다.
                                     player_left_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 왼손에 있는 방패를 무기번호에따라 활성화 시킨다
+                                    User_Manager.left_weapon_num = item_num;
                                     User_Manager.left_weapon_slot = item_name;//유저의 왼손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
                                     User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
@@ -305,6 +307,7 @@ public class Shop_Manager : MonoBehaviour
                                     GameObject currentWeapon = GameObject.FindWithTag("weapon");//무기태그를 가진 오브젝트를 찾는다
                                     currentWeapon.SetActive(false);//무기태그를 가진 오브젝트를 비활성화 시킨다.
                                     player_right_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 오른손에 있는 무기를 무기번호에따라 활성화 시킨다
+                                    User_Manager.right_weapon_num = item_num;
                                     User_Manager.right_weapon_slot = item_name;//유저의 오른손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
                                     User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
@@ -313,6 +316,7 @@ public class Shop_Manager : MonoBehaviour
                                     GameObject currentShield = GameObject.FindWithTag("shield");//방패태그를 가진 오브젝트를 찾는다
                                     currentShield.SetActive(false);//방패태그를 가진 오브젝트를 비활성화 시킨다.
                                     player_left_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 왼손에 있는 방패를 무기번호에따라 활성화 시킨다
+                                    User_Manager.left_weapon_num = item_num;
                                     User_Manager.left_weapon_slot = item_name;//유저의 왼손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
                                     User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다
@@ -347,6 +351,7 @@ public class Shop_Manager : MonoBehaviour
                                     GameObject currentWeapon = GameObject.FindWithTag("weapon");//무기태그를 가진 오브젝트를 찾는다
                                     currentWeapon.SetActive(false);//무기태그를 가진 오브젝트를 비활성화 시킨다.
                                     player_right_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 오른손에 있는 무기를 무기번호에따라 활성화 시킨다
+                                    User_Manager.right_weapon_num = item_num;
                                     User_Manager.right_weapon_slot = item_name;//유저의 오른손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Damage = amount; //유저에게 무기데미지를 전해준다
                                     User_Manager.attack = User_Manager.power * 2 + User_Manager.weapon_Damage; //유저의 공격데미지를 공식에 맞춰준다
@@ -355,6 +360,7 @@ public class Shop_Manager : MonoBehaviour
                                     GameObject currentShield = GameObject.FindWithTag("shield");//방패태그를 가진 오브젝트를 찾는다
                                     currentShield.SetActive(false);//방패태그를 가진 오브젝트를 비활성화 시킨다.
                                     player_left_hand.transform.GetChild(item_num).gameObject.SetActive(true);//플레이어의 왼손에 있는 방패를 무기번호에따라 활성화 시킨다
+                                    User_Manager.left_weapon_num = item_num;
                                     User_Manager.left_weapon_slot = item_name;//유저의 왼손 슬롯에 무기를 넣는다
                                     User_Manager.weapon_Health = amount; //유저에게 방패hp를 전해준다
                                     User_Manager.max_hp = User_Manager.health * 20 + User_Manager.weapon_Health; //유저의 hp를 공식에 맞춰준다

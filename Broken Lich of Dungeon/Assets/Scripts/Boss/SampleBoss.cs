@@ -27,7 +27,6 @@ public class SampleBoss : MonoBehaviour
     public ColliderCheck explosionCollider;
     public ColliderCheck shockWaveCollider;
 
-
     public float apearRotate = 2F;// 대기상태 딜레이
     public float maxHP = 100F;// 최대 HP
     public float hP = 0F;// HP
@@ -40,7 +39,6 @@ public class SampleBoss : MonoBehaviour
     public float moveSpeed = 3F;// 움직이는 속도
     public float chaseSpeed = 6F;// 쫒아가는 속도
     public float damagedCool = 1F;// 대미지를 받고 기다리는 쿨타임
-    public float damageHP = 5F;// 피격 대미지
     public float attackPower = 10F;// 공격력
     public bool phase2;// phase2일 경우 체크
 
@@ -54,7 +52,7 @@ public class SampleBoss : MonoBehaviour
     bool isRunning;// 달리고 있는지
     bool isTwoThird;
     bool isOneThird;
-
+    public bool die;
     #endregion
 
     #region 시작 함수
@@ -101,7 +99,6 @@ public class SampleBoss : MonoBehaviour
                 transform.Translate(-transform.forward * 0.5F);
                 yield return new WaitForEndOfFrame();
             }
-            tornado.gameObject.SetActive(false);
             ////////////////////////////////////
 
             // 내려가기
@@ -127,6 +124,16 @@ public class SampleBoss : MonoBehaviour
         if (bossState == BossState.Wait && curTime >= 15F)
         {
             bossState = BossState.Idle;
+        }
+
+        if (isInvincible)
+        {
+            chain.gameObject.SetActive(true);
+            chain.Play();
+        }
+        else
+        {
+            chain.Stop();
         }
 
         // 상태에 따른 함수 실행
@@ -189,6 +196,7 @@ public class SampleBoss : MonoBehaviour
         {
             StopCoroutine("LookPlayer");// 바라보기 중단
 
+            // 페이즈에 따른 공격 패턴 실행
             if (phase2)
             {
                 StartCoroutine("Phase2");
@@ -196,7 +204,7 @@ public class SampleBoss : MonoBehaviour
             else
             {
                 // 랜덤으로 3가지 패턴 실행
-                switch (UnityEngine.Random.Range(0, 3))
+                switch (Random.Range(0, 3))
                 {
                     case 0:
                         StartCoroutine("Pattern1");
@@ -236,7 +244,6 @@ public class SampleBoss : MonoBehaviour
         StopTrace();// 추적 중단
         StopCoroutine("LookPlayer");// 플레이어를 바라보기
 
-        print("okAttack");////////////////////////////////////////////////////////////////////////////////////////
         animator.SetTrigger("attack");// 공격 모션
         yield return new WaitForSeconds(1F);
         if (meleeCollider.colliderCheck)
@@ -382,12 +389,13 @@ public class SampleBoss : MonoBehaviour
         //////////////////////////////////////
     }
 
+    // 페이즈2
     IEnumerator Phase2()
     {
         print("Phase2");//////
         animator.SetInteger("state", 0);
         StartCoroutine("LookPlayer");// 플레이어를 바라본다
-        yield return new WaitForSeconds(0.2F);
+        yield return new WaitForSeconds(0.3F);
 
         while (Vector3.Distance(transform.position, getTargetPosition()) > attackRange)
         {
@@ -404,7 +412,7 @@ public class SampleBoss : MonoBehaviour
         animator.SetInteger("state", 3);
         animator.SetTrigger("attack");
 
-        yield return new WaitForSeconds(0.8F);
+        yield return new WaitForSeconds(1F);
         if (meleeCollider.colliderCheck)
         {
             print("Attack!!!");
@@ -413,7 +421,7 @@ public class SampleBoss : MonoBehaviour
         }
         animator.ResetTrigger("attack");// 전투 상태
 
-        yield return new WaitForSeconds(0.8F);
+        yield return new WaitForSeconds(0.9F);
 
         curTime = 0;
         bossState = BossState.Idle;
@@ -448,15 +456,20 @@ public class SampleBoss : MonoBehaviour
             }
             else
             {
-                bossState = BossState.Idle;
+                StartCoroutine("CounterAttack");
+                bossState = BossState.Wait;
+
             }
             curTime = 0;
         }
     }
 
+    // 3분할 대미지
     IEnumerator ThirdDamaged()
     {
         print("nonono");
+        tornado.gameObject.SetActive(true);
+        tornado.Play();// 토네이도
 
         // 점프///////////////////////////////////////////////////////////////////
         Vector3 jumpPosition = transform.position + new Vector3(0, jumpHight, 0);
@@ -468,18 +481,113 @@ public class SampleBoss : MonoBehaviour
         }
         /////////////////////////////////////////////////////////////////////////
 
-        Vector3 teleportZone = new Vector3(20, 0, 0);
+        Vector3 teleportZone = Vector3.zero;
+        switch (Random.Range(0, 5))
+        {
+            case 0:
+                teleportZone = new Vector3(20, 0, 0);
+                break;
+            case 1:
+                teleportZone = new Vector3(20, 0, 15);
+                break;
+            case 2:
+                teleportZone = new Vector3(20, 0, -15);
+                break;
+            case 3:
+                teleportZone = new Vector3(10, 0, 15);
+                break;
+            case 4:
+                teleportZone = new Vector3(10, 0, -15);
+                break;
+            default:
+                teleportZone = new Vector3(0, 0, 0);
+                break;
+        }
+
         transform.localPosition = teleportZone;
-        chain.gameObject.SetActive(true);
-        chain.Play();
 
         yield return new WaitForSeconds(2F);
 
-        chain.Stop();
+        tornado.Stop();
 
         bossState = BossState.Idle;
         curTime = 0;
         yield return new WaitForSeconds(1F);
+    }
+
+    // 반격
+    IEnumerator CounterAttack()
+    {
+        print("CounterAttack!!!");/////////////////////////////
+        yield return new WaitForSeconds(0.2F);
+        animator.SetInteger("state", 0);
+        StartCoroutine("LookPlayer");
+        yield return new WaitForSeconds(0.1F);
+        animator.SetInteger("state", 3);
+        yield return new WaitForSeconds(0.1F);
+        print("PlayerAttack!!!");/////////////////////////////
+
+        // 2회 마법 공격
+        for (int i = 0; i < 2; i++)
+        {
+            animator.SetTrigger("attack");// 공격 모션
+
+
+
+            Vector3 targetpoint = getTargetPosition();// 플레이어 위치를 타겟으로
+            dustSmoke.gameObject.SetActive(true);
+            dustSmoke.position = targetpoint + new Vector3(0, 0.5F, 0);
+            dustSmoke.GetComponentInChildren<ParticleSystem>().Play();
+
+            yield return new WaitForSeconds(1F);
+
+            if (meleeCollider.colliderCheck)
+            {
+                print("Attack!!!");
+                User_Manager.hp -= attackPower;
+                User_Manager.instance.Damaged();
+            }
+
+            dustSmoke.GetComponentInChildren<ParticleSystem>().Stop();
+            StopCoroutine("LookPlayer");
+            explosion.gameObject.SetActive(true);
+            explosion.position = targetpoint + new Vector3(0, 0.5F, 0);
+
+            yield return new WaitForSeconds(0.5F);
+
+            print(explosionCollider);
+            if (explosionCollider.colliderCheck)
+            {
+                print("yes");
+                User_Manager.hp -= attackPower;
+                User_Manager.instance.Damaged();
+            }
+
+            foreach (var item in explosion.GetComponentsInChildren<ParticleSystem>())
+            {
+                item.Play();
+            }
+
+            print("마법 공격");// 마법 공격
+
+            yield return new WaitForSeconds(0.5F);
+            foreach (var item in explosion.GetComponentsInChildren<ParticleSystem>())
+            {
+                item.Stop();
+            }
+            StartCoroutine("LookPlayer");// 플레이어 바라보기
+            animator.ResetTrigger("attack");// 전투 상태
+            yield return new WaitForEndOfFrame();
+        }
+        yield return new WaitForSeconds(0.5F);
+
+        // 초기화 작업////////////////////
+        dustSmoke.gameObject.SetActive(false);
+        explosion.gameObject.SetActive(false);
+        isInvincible = false;
+        curTime = 0;
+        bossState = BossState.Idle;
+        ////////////////////////////////        
     }
     #endregion
 
@@ -503,12 +611,14 @@ public class SampleBoss : MonoBehaviour
     }
     #endregion
 
+    #region 멈추기
     void StopMove()
     {
         print("Stop");
         animator.SetInteger("state", 0);
         bossState = BossState.Wait;
     }
+    #endregion
 
     #region 죽음 상태
     void Dead()
@@ -519,9 +629,10 @@ public class SampleBoss : MonoBehaviour
         tornado.Stop();
         tornado.Play();// 토네이토
 
-        // 10초 후 삭제
-        if (curTime >= 10F)
+        // 몇 초 후 삭제
+        if (curTime >= 8F)
         {
+            die = true;
             print("삭제");
             gameObject.SetActive(false);
         }
@@ -577,7 +688,7 @@ public class SampleBoss : MonoBehaviour
             StopAllCoroutines();
             isInvincible = true;// 무적상태로 만들기
 
-            hP -= damageHP;
+            hP -= User_Manager.attack;
             if (hP <= 0)
             {
                 animator.SetTrigger("dead");
