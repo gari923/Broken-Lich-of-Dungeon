@@ -372,7 +372,7 @@ public class Enemy : MonoBehaviour
                 {
                     if (transform.parent.GetChild(i).gameObject == gameObject)
                     {
-                        transform.LookAt(new Vector3(target.position.x,transform.position.y,target.position.z));
+                        transform.LookAt(target);
                     }
                     else
                     {
