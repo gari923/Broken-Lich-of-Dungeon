@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUI : MonoBehaviour {
     public GameObject GUI;
@@ -32,11 +33,13 @@ public class GameUI : MonoBehaviour {
                 
         if (gameOver)
         {
+            GUI.transform.GetChild(1).GetComponent<Text>().text = "Try Again";
             gameOver = !gameOver;
             StartCoroutine(TheEnd());
         }
         if (gameClear)
         {
+            GUI.transform.GetChild(1).GetComponent<Text>().text = "Good";
             gameClear = !gameClear;
             StartCoroutine(TheEnd());
         }

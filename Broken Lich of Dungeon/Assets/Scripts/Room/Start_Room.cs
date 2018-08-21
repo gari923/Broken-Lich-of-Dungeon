@@ -1,5 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 //필수로 들어가야 하는것!!!
 //이방에 들어가면 플레이어가 무슨 상태로 변하는지 값을 보낸다
@@ -64,35 +66,11 @@ public class Start_Room : MonoBehaviour
         //방의 클리어 조건을 완료했고 문을 동작시켰다면
         if (GameManager.instance.rock == true && door_Action_Check == true)
         {
-            StartCoroutine("doorOpen");
+            StartCoroutine("DoorOpen");
 
             door_Action_Check = false;
             GameManager.instance.move = true;
 
-<<<<<<< HEAD
-        }
-    }
-
-    IEnumerator doorOpen()
-    {
-        curTime = 0;
-        while (curTime <= openTime)
-        {
-            curTime += Time.deltaTime;
-            doorY.y += Mathf.Lerp(0, -45, Time.deltaTime);
-            door.eulerAngles = doorY;
-            yield return new WaitForEndOfFrame();
-        }
-
-        yield return new WaitForSeconds(1f);
-        curTime = 0;
-        while(curTime <= openTime)
-        {
-            curTime += Time.deltaTime;
-            doorY.y += Mathf.Lerp(-45, 0, Time.deltaTime);
-            door.eulerAngles = doorY;
-            yield return new WaitForEndOfFrame();
-=======
             // 세이브 데이터////////////////////////////////////////////
             print("저장할것이다");
             saveData.savedGold = User_Manager.gold;
@@ -110,13 +88,30 @@ public class Start_Room : MonoBehaviour
             saveData.savedWeaponHealth = User_Manager.weapon_Health;
             print("저장된것이다");
             ///////////////////////////////////////////////////////////
->>>>>>> origin/tails007
         }
 
     }
-<<<<<<< HEAD
-
-=======
     #endregion
->>>>>>> origin/tails007
+    IEnumerator DoorOpen()
+    {
+        curTime = 0;
+        while (curTime <= openTime)
+        {
+            curTime += Time.deltaTime;
+            doorY.y += Mathf.Lerp(0, -45, Time.deltaTime);
+            door.eulerAngles = doorY;
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForSeconds(1f);
+        curTime = 0;
+        while (curTime <= openTime)
+        {
+            curTime += Time.deltaTime;
+            doorY.y += Mathf.Lerp(-45, 0, Time.deltaTime);
+            door.eulerAngles = doorY;
+            yield return new WaitForEndOfFrame();
+        }
+
+    }
 }

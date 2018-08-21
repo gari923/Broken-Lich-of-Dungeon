@@ -86,11 +86,7 @@ public class GameManager : MonoBehaviour
     #region 업데이트 함수
     void Update()
     {
-<<<<<<< HEAD
         int random = Random.Range(0, 5);// 방을 선택할 랜덤 변수
-=======
-            int random = Random.Range(0, 5);// 방을 선택할 랜덤 변수
->>>>>>> origin/yudahee
         // Rock 이 True이고 플레이어가 상호작용키를 눌렀을 경우 방을 랜덤으로 이동
         if (rock == true && move == true)
         {
