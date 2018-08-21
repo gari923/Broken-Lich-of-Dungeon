@@ -2733,7 +2733,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: c230b9246bce7bf41bc8bd813b5e70e3, type: 3}
   m_Controller: {fileID: 9100000, guid: ae25e8e15399d634e8f648c62cd0bf27, type: 2}
-  m_CullingMode: 1
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -2875,7 +2875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveRange: 50
-  viewAngle: 120
+  viewAngle: 100
   pathRange: 1
   idleDelay: 1
   attackDelay: 1.5
@@ -2883,9 +2883,9 @@ MonoBehaviour:
   destinationRange: 1
   warningRange: 20
   deadTime: 3
-  enemy_damage: 40
+  enemy_damage: 10
   enemy_hp: 0
-  enemy_max_hp: 40
+  enemy_max_hp: 100
   enemy_drop_gold: 100000
   attack_range: 2
   es: 0
@@ -3065,7 +3065,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.6
-  m_Speed: 3
+  m_Speed: 6
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
