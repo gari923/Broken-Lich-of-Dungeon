@@ -1,36 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
+/// <summary>
+/// 게임 일시정지 클래스
+/// </summary>
 public class PauseMenu : MonoBehaviour
 {
-    public Player playerScript;
-    public GameObject pauseUI;
-    SaveClass saveData;
+    #region 멤버 변수
+    public Player playerScript;// 플레이어의 스크립트
+    public GameObject pauseUI;// 일시정지 UI 오브젝트    
 
-    bool paused = false;
+    bool paused = false;// 일시정지 확인 플래그
+    #endregion
 
+    #region 시작 함수
     void Start()
     {
-        saveData = (SaveClass)AssetDatabase.
-                LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
-
-        pauseUI.SetActive(false);
+        pauseUI.SetActive(false);// 시작할 때는 안보이게
     }
+    #endregion
 
+    #region 업데이트 함수
     void Update()
     {
-
+        // 일시정지 상태에 따른 실행
         if (paused)
         {
             pauseUI.SetActive(true);
-            Time.timeScale = 0F;
 
+            // esc로 종료, 다른 키로 게임 재개
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                print("종료한다");
                 Exit();
             }
             else if (Input.anyKeyDown)
@@ -41,36 +40,35 @@ public class PauseMenu : MonoBehaviour
         else
         {
             pauseUI.SetActive(false);
-            Time.timeScale = 1F;
         }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            print(saveData);
-
-            saveData.savedGold = User_Manager.gold;
-            saveData.savedLV = User_Manager.LV;
-            saveData.savedHealth = User_Manager.health;
-            saveData.savedPower = User_Manager.power;
-            saveData.savedLeftWeapon = User_Manager.left_weapon_slot;
-            saveData.savedRightWeapon = User_Manager.right_weapon_slot;
-
-            print("outside");
+            // UI를 카메라 앞에 위치
             pauseUI.transform.forward = Camera.main.transform.forward;
             pauseUI.transform.position = Camera.main.transform.position + Camera.main.transform.forward;
 
+            // 일시정지 상태 체크 토글
             paused = !paused;
+
+            // 게임상의 시간 토글
+            Time.timeScale = 1 - Time.timeScale;
         }
     }
+    #endregion
 
+    #region 게임 재게 함수
     public void Resume()
     {
         paused = !paused;
     }
+    #endregion
 
+    #region 게임 종료 함수
     public void Exit()
     {
         print("앱 종료");
         Application.Quit();
     }
+    #endregion
 }

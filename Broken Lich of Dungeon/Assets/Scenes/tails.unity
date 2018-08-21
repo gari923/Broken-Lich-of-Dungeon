@@ -9004,8 +9004,7 @@ MonoBehaviour:
   moveSpeed: 5
   chaseSpeed: 10
   damagedCool: 0.7
-  damageHP: 5
-  attackPower: 10
+  attackPower: 20
   phase2: 0
   isInvincible: 0
 --- !u!195 &293091599
@@ -10266,80 +10265,6 @@ Transform:
   m_Father: {fileID: 45336551}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &337610506
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 337610507}
-  - component: {fileID: 337610509}
-  - component: {fileID: 337610508}
-  m_Layer: 0
-  m_Name: GameSaved
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &337610507
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 337610506}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 967089130}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 50}
-  m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0, y: 1}
---- !u!114 &337610508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 337610506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 10
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 1
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Game Saved!
---- !u!222 &337610509
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 337610506}
 --- !u!1 &338863994
 GameObject:
   m_ObjectHideFlags: 0
@@ -45946,7 +45871,6 @@ RectTransform:
   - {fileID: 1365995802}
   - {fileID: 1098233906}
   - {fileID: 62273687}
-  - {fileID: 337610507}
   m_Father: {fileID: 1901748416}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -72988,7 +72912,7 @@ Transform:
   m_GameObject: {fileID: 1498094041}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -7.287072, y: 0, z: -399.1003}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 634484702}
   - {fileID: 468923849}
@@ -73026,17 +72950,16 @@ MonoBehaviour:
   apearRotate: 1
   maxHP: 100
   hP: 0
-  idle2CombatTime: 0
-  combatChooseTime: 0
+  idle2CombatTime: 0.1
+  combatChooseTime: 0.1
   attackRange: 5
-  lookPlayerSpeed: 3
+  lookPlayerSpeed: 5
   jumpHight: 10
-  jumpSpeed: 5
+  jumpSpeed: 10
   moveSpeed: 10
   chaseSpeed: 20
-  damagedCool: 0.7
-  damageHP: 5
-  attackPower: 90
+  damagedCool: 0.5
+  attackPower: 80
   phase2: 1
   isInvincible: 0
 --- !u!136 &1498094044

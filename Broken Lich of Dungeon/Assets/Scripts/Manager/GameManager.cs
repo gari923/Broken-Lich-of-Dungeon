@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 #endregion
 
 /// <summary>
@@ -183,7 +184,6 @@ public class GameManager : MonoBehaviour
             alivehp = true;
             StartCoroutine(PlayerMove(start_Room_StartPoint, currentRoom));
             User_Manager.alive = true;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
             //SceneManager.LoadScene(0);
             //User_Manager.alive = true;
@@ -237,6 +237,13 @@ public class GameManager : MonoBehaviour
             //start_Room.SetActive(true);
             alivehp = false;
             User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
+
+            SaveClass saveData = (SaveClass)AssetDatabase.// 세이브 데이터 파일 불러오기
+                    LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
+
+            saveData.savedGold = User_Manager.gold / 2;
+
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
         clear = false;
