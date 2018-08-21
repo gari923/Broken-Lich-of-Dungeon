@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour
     GameObject player;//플레이어
     GameObject currentRoom;//현재 플레이어의 룸
 
+    public bool reset = true;//방을 리셋시키는 변수
+
     //다른 방으로 갈수 있는지 확인하는 변수(각 방에서 조건을 완료시키면 true)
     public bool rock = false;
     //플레이어가 이동의 상호작용을 활성화 확인(각 방에서 이동 상호작용을 누르면 true)
@@ -84,7 +86,11 @@ public class GameManager : MonoBehaviour
     #region 업데이트 함수
     void Update()
     {
+<<<<<<< HEAD
         int random = Random.Range(0, 5);// 방을 선택할 랜덤 변수
+=======
+            int random = Random.Range(0, 5);// 방을 선택할 랜덤 변수
+>>>>>>> origin/yudahee
         // Rock 이 True이고 플레이어가 상호작용키를 눌렀을 경우 방을 랜덤으로 이동
         if (rock == true && move == true)
         {

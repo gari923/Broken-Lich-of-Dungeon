@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - shop
+  - Boss
+  - weapon
+  - shield
+  - door
+  - maze
   layers:
   - Default
   - TransparentFX
