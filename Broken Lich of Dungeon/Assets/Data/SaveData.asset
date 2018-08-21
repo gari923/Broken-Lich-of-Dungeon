@@ -15,6 +15,7 @@ MonoBehaviour:
   savedLV: 1
   savedPower: 5
   savedHealth: 5
+<<<<<<< HEAD
   savedMaxHP: 100
   savedHP: 100
   savedAttack: 10
@@ -24,3 +25,7 @@ MonoBehaviour:
   savedLeftWeapon: "\uBC84\uD074\uB7EC"
   savedRightNumber: 0
   savedLeftNumber: 0
+=======
+  savedRightWeapon: 
+  savedLeftWeapon: 
+>>>>>>> parent of f36e98b... something

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 19a51df038ad88b4ea061ac5e8873c29
+=======
+guid: f2dcc81e15c850c4788ab845b5e878a1
+>>>>>>> parent of f36e98b... something
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
