@@ -629,6 +629,10 @@ public class SampleBoss : MonoBehaviour
         tornado.Stop();
         tornado.Play();// 토네이토
 
+        // 보스 킬카운트 증가 및 클리어
+        User_Manager.allClear++;
+        GameManager.instance.bossClear = true;
+
         // 몇 초 후 삭제
         if (curTime >= 8F)
         {

@@ -45,6 +45,8 @@ public class User_Manager : MonoBehaviour
     //유저가 생존했는지 확인하는 변수
     public static bool alive = true;
 
+    public static int allClear = 0;
+
     // 스탯 표시
     public GameObject UI;
     public Text text_lv;

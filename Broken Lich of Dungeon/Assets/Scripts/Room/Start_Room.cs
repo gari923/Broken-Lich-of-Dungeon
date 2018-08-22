@@ -39,6 +39,7 @@ public class Start_Room : MonoBehaviour
         Player.instance.ps = pState.Idle;//플레이어의 상태를 아이들 상태로 만든다
         GameManager.instance.rock = true;//방의 클리어 조건을 완료시킨다
         doorY = door.eulerAngles;
+        print(door.eulerAngles);
     }
     #endregion
 
@@ -69,6 +70,7 @@ public class Start_Room : MonoBehaviour
             StartCoroutine("DoorOpen");
 
             door_Action_Check = false;
+            Player.instance.rayObjectclick = null;
             GameManager.instance.move = true;
 
             // 세이브 데이터////////////////////////////////////////////
@@ -103,14 +105,10 @@ public class Start_Room : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        yield return new WaitForSeconds(1f);
-        curTime = 0;
-        while (curTime <= openTime)
+        if(curTime >= openTime)
         {
-            curTime += Time.deltaTime;
-            doorY.y += Mathf.Lerp(-45, 0, Time.deltaTime);
-            door.eulerAngles = doorY;
-            yield return new WaitForEndOfFrame();
+            door.eulerAngles = new Vector3(0,270,0);
+            doorY = door.eulerAngles;
         }
 
     }

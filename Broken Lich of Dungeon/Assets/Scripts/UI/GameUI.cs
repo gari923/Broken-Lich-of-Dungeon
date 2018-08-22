@@ -49,6 +49,7 @@ public class GameUI : MonoBehaviour {
     {
         Time.timeScale = 1 - Time.timeScale;
         GUI.SetActive(true);
+        yield return new WaitForSecondsRealtime(2F);
         yield return new WaitUntil(() => Input.anyKey);
         Time.timeScale = 1 - Time.timeScale;
         GUI.SetActive(false);

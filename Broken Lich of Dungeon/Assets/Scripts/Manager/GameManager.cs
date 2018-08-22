@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     bool knife_Check = true;
     bool projectile_Check = true;
     bool door_Check = true;
+    bool boss_Check = true;
 
     //각각의 방
     public GameObject start_Room;
@@ -51,6 +52,8 @@ public class GameManager : MonoBehaviour
     public bool move = false;
     //방클리어 확인하는 변수
     public bool clear = false;
+
+    public bool bossClear = false;
 
     bool alivehp = false;
 
@@ -95,11 +98,21 @@ public class GameManager : MonoBehaviour
             && patience_Check == false
             && knife_Check == false
             && projectile_Check == false
-            && door_Check == false)
+            && door_Check == false
+            && boss_Check == true)
             {
                 // 라스트룸으로
+                last_Room.SetActive(true);
+                boss_Check = false;
+                StartCoroutine(PlayerMove(last_Room_StartPoint, currentRoom));
+                rock = false;
+                move = false;
+            }
 
-                return;
+            // 보스를 죽였다!
+            if(boss_Check == false && bossClear == true)
+            {
+                // 로비로 돌아가는 스크립트
             }
 
 
@@ -182,6 +195,7 @@ public class GameManager : MonoBehaviour
             knife_Check = true;
             projectile_Check = true;
             door_Check = true;
+            boss_Check = true;
             User_Manager.hp = float.MaxValue; //유저의 피를 최대치로 채운다
             alivehp = true;
             StartCoroutine(PlayerMove(start_Room_StartPoint, currentRoom));

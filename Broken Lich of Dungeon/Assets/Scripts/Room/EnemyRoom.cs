@@ -23,6 +23,9 @@ public class EnemyRoom : MonoBehaviour
     // 클리어 조건
     public bool door_Action_Check = false;
     public bool enemy_Remove_Check = false;
+    public bool boss_Remove_Check = false;
+
+    public GameObject Boss;
 
     float curTime = 0;
     float startTime = 3;
@@ -47,8 +50,15 @@ public class EnemyRoom : MonoBehaviour
             {
                 spawnPool.Add(transform.GetChild(i));
             }
-        }
 
+            if (transform.GetChild(i).name.Equals("BossPhase1"))
+            {
+                Boss = transform.GetChild(i).gameObject;
+                Boss.SetActive(false);
+            }
+
+        }
+        boss_Remove_Check = false;
         Player.instance.ps = pState.Attack;
 
     }
@@ -67,13 +77,13 @@ public class EnemyRoom : MonoBehaviour
             }
         }
 
-        if (spawnPool.Count == 0 && getStart == true && GameObject.FindGameObjectsWithTag("Boss").Length == 0)
+        if (spawnPool.Count == 0 && getStart == true)
         {
             enemy_Remove_Check = true;
-            Player.instance.ps = pState.Idle;
         }
         else
         {
+            boss_Remove_Check = false;
             enemy_Remove_Check = false;
             Player.instance.ps = pState.Attack;
             for (int i = 0; i < spawnPool.Count; i++)
@@ -88,9 +98,32 @@ public class EnemyRoom : MonoBehaviour
 
         if (enemy_Remove_Check == true)
         {
+            if (Boss == null)
+            {
+                boss_Remove_Check = true;
+            }
+            else
+            {
+                if (Boss.GetComponent<SampleBoss>().die == false)
+                {
+                    Boss.SetActive(true);
+                }
+                else
+                {
+                    Boss.SetActive(false);
+                    boss_Remove_Check = true;
+                }
+            }
+        }
+
+
+
+
+        if (enemy_Remove_Check == true && boss_Remove_Check == true)
+        {
             //GameManager.instance.rock = true;
             //GameManager.instance.move = true;
-            
+            Player.instance.ps = pState.Idle;
             GameManager.instance.clear = true;
             //gameObject.SetActive(false);
         }

@@ -11,21 +11,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365dc2b2b85396e4487684d2ac456c07, type: 3}
   m_Name: SaveData
   m_EditorClassIdentifier: 
-  savedGold: 0
-  savedLV: 1
-  savedPower: 5
-  savedHealth: 5
-<<<<<<< HEAD
-  savedMaxHP: 100
-  savedHP: 100
-  savedAttack: 10
-  savedWeaponDamage: 0
-  savedWeaponHealth: 0
-  savedRightWeapon: "\uC2A4\uD2F8 \uB300\uAC70"
-  savedLeftWeapon: "\uBC84\uD074\uB7EC"
-  savedRightNumber: 0
-  savedLeftNumber: 0
-=======
-  savedRightWeapon: 
-  savedLeftWeapon: 
->>>>>>> parent of f36e98b... something
+  savedGold: 26060
+  savedLV: 137
+  savedPower: 93
+  savedHealth: 53
+  savedMaxHP: 1360
+  savedHP: 1360
+  savedAttack: 226
+  savedWeaponDamage: 40
+  savedWeaponHealth: 300
+  savedRightWeapon: "\uADF8\uB78C"
+  savedLeftWeapon: "\uD0C0\uC6CC\uC274\uB4DC"
+  savedRightNumber: 12
+  savedLeftNumber: 3

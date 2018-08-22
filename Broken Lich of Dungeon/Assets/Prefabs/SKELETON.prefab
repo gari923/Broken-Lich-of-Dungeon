@@ -1665,12 +1665,19 @@ Animator:
   m_GameObject: {fileID: 1287059938605852}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: a58154c350c4ccf47a6cdad03a8dca1a, type: 3}
-  m_Controller: {fileID: 9100000, guid: afcb420425baf804fbb498a95b01a92d, type: 2}
+  m_Controller: {fileID: 9100000, guid: f064db2bd08a0234999670435540fb9d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed by
+    Humanoid clips.\n\tTransform 'Bip01 L Finger1'\n\tTransform 'Bip01 L Finger01'\n\tTransform
+    'Bip01 R Finger1'\n\tTransform 'Bip01 R Finger11'\n\tTransform 'Bip01 Head'\n\tTransform
+    'Bip01 L Toe0'\n\tTransform 'Bip01 R Toe0'\n\tTransform 'Bip01 L Thigh'\n\tTransform
+    'Bip01 L Foot'\n\tTransform 'Bip01 R Thigh'\n\tand more ...\n\tFrom animation
+    clip 'Idle1'\n\tFrom animation clip 'Hit1'\n\tFrom animation clip 'Walk 1'\n\tFrom
+    animation clip 'Fall1'\n\tFrom animation clip 'Attack1h1'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114000299005214884
@@ -1861,7 +1868,7 @@ MonoBehaviour:
   deadTime: 3
   enemy_damage: 20
   enemy_hp: 0
-  enemy_max_hp: 100
+  enemy_max_hp: 50
   enemy_drop_gold: 100000
   attack_range: 2
   es: 0
