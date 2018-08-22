@@ -256,19 +256,11 @@ public class GameManager : MonoBehaviour
             alivehp = false;
             User_Manager.hp = User_Manager.max_hp; //유저의 피를 최대치로 채운다
 
-<<<<<<< HEAD
-            SaveClass saveData = (SaveClass)AssetDatabase.// 세이브 데이터 파일 불러오기
-                    LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
-
-            saveData.savedGold = (float)System.Math.Ceiling(User_Manager.gold / 2);
-
-=======
             //SaveClass saveData = (SaveClass)AssetDatabase.// 세이브 데이터 파일 불러오기
             //        LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
             
             PlayerPrefs.SetFloat("savedGold", (float)System.Math.Ceiling((User_Manager.gold / 2)));
             
->>>>>>> origin/tails007
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 

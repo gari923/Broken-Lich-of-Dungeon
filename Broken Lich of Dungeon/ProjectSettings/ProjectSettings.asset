@@ -158,7 +158,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.KITRI.Broken_Lich_of_Dungeon
+    Android: com.KITRI.Broken_Lich_Of_Old_Dungeon
     Standalone: com.KITRI.BLOOD
   buildNumber: {}
   AndroidBundleVersionCode: 1
@@ -649,9 +649,9 @@ PlayerSettings:
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.4
   apiCompatibilityLevel: 2
-  cloudProjectId: f5e1ac69-c2d7-40fd-bd25-1686f52708ce
-  projectName: Broken Lich of Dungeon
-  organizationId: gari923
+  cloudProjectId: 
+  projectName: 
+  organizationId: 
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0
