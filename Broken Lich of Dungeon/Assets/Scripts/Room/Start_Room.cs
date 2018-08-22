@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+﻿//using UnityEditor;
 using UnityEngine;
 
 //필수로 들어가야 하는것!!!
@@ -21,14 +21,14 @@ public class Start_Room : MonoBehaviour
     // 클리어 조건
     public bool door_Action_Check = false;
 
-    SaveClass saveData;// 세이브 데이터 클래스
+    //SaveClass saveData;// 세이브 데이터 클래스
     #endregion
 
     #region 시작 함수
     void Start()
     {
-        saveData = (SaveClass)AssetDatabase.// 세이브 데이터 파일 불러오기
-                LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
+        //saveData = (SaveClass)AssetDatabase.// 세이브 데이터 파일 불러오기
+        //        LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
 
         Player.instance.ps = pState.Idle;//플레이어의 상태를 아이들 상태로 만든다
         GameManager.instance.rock = true;//방의 클리어 조건을 완료시킨다
@@ -62,23 +62,35 @@ public class Start_Room : MonoBehaviour
             door_Action_Check = false;
             GameManager.instance.move = true;
 
-            // 세이브 데이터////////////////////////////////////////////
-            print("저장할것이다");
-            saveData.savedGold = User_Manager.gold;
-            saveData.savedLV = User_Manager.LV;
-            saveData.savedAttack = User_Manager.attack;
-            saveData.savedHP = User_Manager.hp;
-            saveData.savedMaxHP = User_Manager.max_hp;
-            saveData.savedPower = User_Manager.power;
-            saveData.savedHealth = User_Manager.health;
-            saveData.savedLeftWeapon = User_Manager.left_weapon_slot;
-            saveData.savedRightWeapon = User_Manager.right_weapon_slot;
-            saveData.savedRightNumber = User_Manager.right_weapon_num;
-            saveData.savedLeftNumber = User_Manager.left_weapon_num;
-            saveData.savedWeaponDamage = User_Manager.weapon_Damage;
-            saveData.savedWeaponHealth = User_Manager.weapon_Health;
-            print("저장된것이다");
-            ///////////////////////////////////////////////////////////
+            //// 세이브 데이터////////////////////////////////////////////
+            //print("저장할것이다");
+            //saveData.savedGold = User_Manager.gold;
+            //saveData.savedLV = User_Manager.LV;
+            //saveData.savedAttack = User_Manager.attack;
+            //saveData.savedHP = User_Manager.hp;
+            //saveData.savedMaxHP = User_Manager.max_hp;
+            //saveData.savedPower = User_Manager.power;
+            //saveData.savedHealth = User_Manager.health;
+            //saveData.savedLeftWeapon = User_Manager.left_weapon_slot;
+            //saveData.savedRightWeapon = User_Manager.right_weapon_slot;
+            //saveData.savedRightNumber = User_Manager.right_weapon_num;
+            //saveData.savedLeftNumber = User_Manager.left_weapon_num;
+            //saveData.savedWeaponDamage = User_Manager.weapon_Damage;
+            //saveData.savedWeaponHealth = User_Manager.weapon_Health;
+            //print("저장된것이다");
+            /////////////////////////////////////////////////////////////
+            PlayerPrefs.SetFloat("savedGold", User_Manager.gold);
+            PlayerPrefs.SetFloat("savedLV", User_Manager.LV);
+            PlayerPrefs.SetFloat("savedAttack", User_Manager.attack);
+            PlayerPrefs.SetFloat("savedHP", User_Manager.max_hp);
+            PlayerPrefs.SetFloat("savedPower", User_Manager.power);
+            PlayerPrefs.SetFloat("savedHealth", User_Manager.health);
+            PlayerPrefs.SetString("savedLeftWeapon", User_Manager.left_weapon_slot);
+            PlayerPrefs.SetString("savedRightWeapon", User_Manager.right_weapon_slot);
+            PlayerPrefs.SetFloat("savedLeftNumber", User_Manager.left_weapon_num);
+            PlayerPrefs.SetFloat("savedRightNumber", User_Manager.right_weapon_num);
+            PlayerPrefs.SetFloat("savedWeaponDamage", User_Manager.weapon_Damage);
+            PlayerPrefs.SetFloat("savedWeaponHealth", User_Manager.weapon_Health);
         }
     }
     #endregion

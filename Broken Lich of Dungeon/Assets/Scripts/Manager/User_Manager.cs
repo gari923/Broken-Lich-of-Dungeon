@@ -1,6 +1,6 @@
 ﻿#region 네임스페이스
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
@@ -73,38 +73,51 @@ public class User_Manager : MonoBehaviour
         {
             instance = this;
         }
+        
+        gold = PlayerPrefs.GetFloat("savedGold", 0);
+        LV = PlayerPrefs.GetFloat("savedLV", 1);
+        attack = PlayerPrefs.GetFloat("savedAttack", 5 * 2);
+        max_hp = PlayerPrefs.GetFloat("savedHP", 5 * 20);
+        power = PlayerPrefs.GetFloat("savedPower", 5);
+        health = PlayerPrefs.GetFloat("savedHealth", 5);
+        left_weapon_slot = PlayerPrefs.GetString("savedLeftWeapon", "버클러");
+        right_weapon_slot = PlayerPrefs.GetString("savedRightWeapon", "스틸 대거");
+        left_weapon_num = PlayerPrefs.GetInt("savedLeftNumber", 0);
+        right_weapon_num = PlayerPrefs.GetInt("savedRightNumber", 0);
+        weapon_Damage = PlayerPrefs.GetFloat("savedWeaponDamage", 0);
+        weapon_Health= PlayerPrefs.GetFloat("savedWeaponHealth", 0);
 
         // 세이브 파일이 없을 경우 파일 생성
-        if (!File.Exists("Assets/Data/SaveData.asset"))
-        {
-            SaveClass asset = SaveClass.CreateInstance<SaveClass>();
-            AssetDatabase.CreateAsset(asset, "Assets/Data/SaveData.asset");
-            AssetDatabase.SaveAssets();
+        //if (!File.Exists("Assets/Data/SaveData.asset"))
+        //{
+        //    SaveClass asset = SaveClass.CreateInstance<SaveClass>();
+        //    AssetDatabase.CreateAsset(asset, "Assets/Data/SaveData.asset");
+        //    AssetDatabase.SaveAssets();
 
-            EditorUtility.FocusProjectWindow();
+        //    EditorUtility.FocusProjectWindow();
 
-            Selection.activeObject = asset;
-        }
+        //    Selection.activeObject = asset;
+        //}
         // 세이브 파일이 있을 경우 불러오기
-        else
-        {
-            SaveClass saveData = (SaveClass)AssetDatabase.
-                LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
+        //else
+        //{
+        //    SaveClass saveData = (SaveClass)AssetDatabase.
+        //        LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
 
-            gold = saveData.savedGold;
-            LV = saveData.savedLV;
-            attack = saveData.savedAttack;
-            hp = saveData.savedHP;
-            max_hp = saveData.savedMaxHP;
-            power = saveData.savedPower;
-            health = saveData.savedHealth;
-            left_weapon_slot = saveData.savedLeftWeapon;
-            right_weapon_slot = saveData.savedRightWeapon;
-            weapon_Damage = saveData.savedWeaponDamage;
-            weapon_Health = saveData.savedWeaponHealth;
-            left_weapon_num = saveData.savedLeftNumber;
-            right_weapon_num = saveData.savedRightNumber;
-        }
+        //    gold = saveData.savedGold;
+        //    LV = saveData.savedLV;
+        //    attack = saveData.savedAttack;
+        //    hp = saveData.savedHP;
+        //    max_hp = saveData.savedMaxHP;
+        //    power = saveData.savedPower;
+        //    health = saveData.savedHealth;
+        //    left_weapon_slot = saveData.savedLeftWeapon;
+        //    right_weapon_slot = saveData.savedRightWeapon;
+        //    weapon_Damage = saveData.savedWeaponDamage;
+        //    weapon_Health = saveData.savedWeaponHealth;
+        //    left_weapon_num = saveData.savedLeftNumber;
+        //    right_weapon_num = saveData.savedRightNumber;
+        //}
     }
     #endregion
 
