@@ -1,7 +1,7 @@
 ﻿#region 네임스페이스
 using System.Collections;
 using System.IO;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -33,10 +33,10 @@ public class GameSceneManager : MonoBehaviour
     #region 시작 함수
     void Start()
     {
-        if (!File.Exists("Assets/Data/SaveData.asset"))
-        {
-            cont.SetActive(false);
-        }
+        //if (!File.Exists("Assets/Data/SaveData.asset"))
+        //{
+        //    cont.SetActive(false);
+        //}
 
         DontDestroyOnLoad(gameObject);
         t2.text = "";
@@ -53,19 +53,21 @@ public class GameSceneManager : MonoBehaviour
     #region 새 게임 함수
     public void OnNewGameStart()
     {
-        if (File.Exists("Assets/Data/SaveData.asset"))
-        {
-            print("확인");
-            File.Delete("Assets/Data/SaveData.asset");
+        //if (File.Exists("Assets/Data/SaveData.asset"))
+        //{
+        //    print("확인");
+        //    File.Delete("Assets/Data/SaveData.asset");
 
-            SaveClass asset = SaveClass.CreateInstance<SaveClass>();
-            AssetDatabase.CreateAsset(asset, "Assets/Data/SaveData.asset");
-            AssetDatabase.SaveAssets();
+        //    SaveClass asset = SaveClass.CreateInstance<SaveClass>();
+        //    AssetDatabase.CreateAsset(asset, "Assets/Data/SaveData.asset");
+        //    AssetDatabase.SaveAssets();
 
-            EditorUtility.FocusProjectWindow();
+        //    EditorUtility.FocusProjectWindow();
 
-            Selection.activeObject = asset;
-        }
+        //    Selection.activeObject = asset;
+        //}
+
+        PlayerPrefs.DeleteAll();
 
         StartCoroutine("LoadScene");
     }
@@ -81,9 +83,9 @@ public class GameSceneManager : MonoBehaviour
     #region 메인 씬 로딩
     IEnumerator LoadScene()
     {
-        ne.GetComponent<Button>().interactable = false;
-        cont.GetComponent<Button>().interactable = false;
-        exi.GetComponent<Button>().interactable = false;
+        //ne.GetComponent<Button>().interactable = false;
+        //cont.GetComponent<Button>().interactable = false;
+        //exi.GetComponent<Button>().interactable = false;
 
         AsyncOperation ao = SceneManager.LoadSceneAsync("MainScene");
         ao.allowSceneActivation = false;
