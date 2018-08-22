@@ -11,13 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 365dc2b2b85396e4487684d2ac456c07, type: 3}
   m_Name: SaveData
   m_EditorClassIdentifier: 
-  savedGold: 26060
-  savedLV: 137
-  savedPower: 93
-  savedHealth: 53
-  savedMaxHP: 1360
-  savedHP: 1360
-  savedAttack: 226
+  savedGold: 2380
+  savedLV: 17
+  savedPower: 13
+  savedHealth: 13
+  savedMaxHP: 560
+  savedHP: 550
+  savedAttack: 66
   savedWeaponDamage: 40
   savedWeaponHealth: 300
   savedRightWeapon: "\uADF8\uB78C"

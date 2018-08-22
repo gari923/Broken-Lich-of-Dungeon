@@ -6,5 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/yudahee.unity
-    guid: 368673dd14735504193d00f68583dab4
+    path: Assets/Scenes/LobbyScene.unity
+    guid: 34b2cdc2081a068408a8c31a4561bf41
+  - enabled: 1
+    path: Assets/Scenes/MainScene.unity
+    guid: bd80cc8a0d5522844bd29287d5aeacfc

@@ -74,8 +74,7 @@ public class SampleBoss : MonoBehaviour
 
     #region 등장
     IEnumerator Appear()
-    {
-        yield return new WaitForSeconds(2F);
+    {        
         tornado.gameObject.SetActive(true);
         tornado.Play();// 토네이도
 
@@ -506,7 +505,7 @@ public class SampleBoss : MonoBehaviour
 
         transform.localPosition = teleportZone;
 
-        yield return new WaitForSeconds(2F);
+        yield return new WaitForSeconds(1F);
 
         tornado.Stop();
 

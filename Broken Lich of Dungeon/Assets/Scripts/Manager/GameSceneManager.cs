@@ -85,7 +85,7 @@ public class GameSceneManager : MonoBehaviour
         cont.GetComponent<Button>().interactable = false;
         exi.GetComponent<Button>().interactable = false;
 
-        AsyncOperation ao = SceneManager.LoadSceneAsync(1);
+        AsyncOperation ao = SceneManager.LoadSceneAsync("MainScene");
         ao.allowSceneActivation = false;
 
         for (int i = 0; i < t1.text.Length; i++)

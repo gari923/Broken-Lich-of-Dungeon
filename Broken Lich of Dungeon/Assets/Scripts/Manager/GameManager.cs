@@ -113,6 +113,7 @@ public class GameManager : MonoBehaviour
             if(boss_Check == false && bossClear == true)
             {
                 // 로비로 돌아가는 스크립트
+                SceneManager.LoadScene("LobbyScene");
             }
 
 
@@ -257,7 +258,7 @@ public class GameManager : MonoBehaviour
             SaveClass saveData = (SaveClass)AssetDatabase.// 세이브 데이터 파일 불러오기
                     LoadAssetAtPath("Assets/Data/SaveData.asset", typeof(SaveClass));
 
-            saveData.savedGold = User_Manager.gold / 2;
+            saveData.savedGold = (float)System.Math.Ceiling(User_Manager.gold / 2);
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }

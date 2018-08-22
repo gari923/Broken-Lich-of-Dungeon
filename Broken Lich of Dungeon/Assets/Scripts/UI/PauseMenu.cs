@@ -69,7 +69,7 @@ public class PauseMenu : MonoBehaviour
     public void Exit()
     {
         print("타이틀로");
-        SceneManager.LoadScene("RobbyScene");
+        SceneManager.LoadScene("LobbyScene");
     }
     #endregion
 }
