@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 게임 일시정지 클래스
@@ -64,11 +65,11 @@ public class PauseMenu : MonoBehaviour
     }
     #endregion
 
-    #region 게임 종료 함수
+    #region 타이틀 화면으로 함수
     public void Exit()
     {
-        print("앱 종료");
-        Application.Quit();
+        print("타이틀로");
+        SceneManager.LoadScene("RobbyScene");
     }
     #endregion
 }
